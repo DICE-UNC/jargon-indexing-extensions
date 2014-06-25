@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.irods</groupId>
 	<artifactId>jargon-indexing-extensions</artifactId>
@@ -13,6 +14,7 @@
 		<jargon.version>4.0.2-SNAPSHOT</jargon.version>
 		<sl4j.version>1.6.6</sl4j.version>
 		<log4j.version>1.2.16</log4j.version>
+		<indexing.version>0.0.1-SNAPSHOT</indexing.version>
 	</properties>
 	<issueManagement>
 		<system>GitHub</system>
@@ -40,32 +42,32 @@
 		</developer>
 	</developers>
 	<repositories>
-  <repository>
-            <id>dice.repository snaps</id>
-            <name>dice.repository.snapshots</name>
-            <url>https://raw.github.com/DICE-UNC/DICE-Maven/master/snapshots</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-                <checksumPolicy>warn</checksumPolicy>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>dice.repository</id>
-            <name>dice.repository</name>
-            <url>https://raw.github.com/DICE-UNC/DICE-Maven/master/releases</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-                <updatePolicy>always</updatePolicy>
-                <checksumPolicy>warn</checksumPolicy>
-            </snapshots>
-        </repository>
+		<repository>
+			<id>dice.repository snaps</id>
+			<name>dice.repository.snapshots</name>
+			<url>https://raw.github.com/DICE-UNC/DICE-Maven/master/snapshots</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>dice.repository</id>
+			<name>dice.repository</name>
+			<url>https://raw.github.com/DICE-UNC/DICE-Maven/master/releases</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</snapshots>
+		</repository>
 		<repository>
 			<id>ibiblio.repository</id>
 			<name>ibiblio.repository</name>
@@ -176,27 +178,31 @@
 	</reporting>
 	<dependencyManagement>
 		<dependencies>
-			
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
 				<version>4.8.2</version>
 			</dependency>
 			<dependency>
+				<groupId>databook</groupId>
+				<artifactId>index</artifactId>
+				<version>${indexing.version}</version>
+				<type>jar</type>
+			</dependency>
+			<dependency>
 				<groupId>log4j</groupId>
 				<artifactId>log4j</artifactId>
 				<version>${log4j.version}</version>
 			</dependency>
-			
 			<dependency>
 				<groupId>org.irods.jargon</groupId>
 				<artifactId>jargon-core</artifactId>
-				<version>${project.version}</version>
+				<version>${jargon.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.irods.jargon</groupId>
 				<artifactId>jargon-data-utils</artifactId>
-				<version>${project.version}</version>
+				<version>${jargon.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.mockito</groupId>
@@ -223,7 +229,7 @@
 				<artifactId>spring-test</artifactId>
 				<version>${spring.core.version}</version>
 			</dependency>
-			
+
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
@@ -236,7 +242,6 @@
 			<artifactId>slf4j-log4j12</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
@@ -251,12 +256,18 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.irods.jargon</groupId>
+			<artifactId>jargon-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.irods.jargon</groupId>
+			<artifactId>jargon-data-utils</artifactId>
+		</dependency>
 	</dependencies>
 	<build>
 		<pluginManagement>
-			<plugins>
-				
-			</plugins>
+			<plugins />
 		</pluginManagement>
 		<plugins>
 			<plugin>
@@ -312,10 +323,11 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 		</plugins>
 	</build>
 	<modules>
-    <module>hive-metadata-indexer</module>
-  </modules>
+		<module>hive-metadata-indexer</module>
+		<module>jargon-indexing-wrapper</module>
+	</modules>
 </project>
