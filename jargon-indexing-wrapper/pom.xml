@@ -11,8 +11,8 @@
 	<groupId>org.irods.jargon</groupId>
 	<artifactId>jargon-indexing-wrapper</artifactId>
 	<name>jargon-indexing-wrapper</name>
-	<properties>
-	</properties>
+	<properties />
+
 	<dependencies>
 		<dependency>
 			<groupId>databook</groupId>
@@ -20,21 +20,27 @@
 			<type>jar</type>
 		</dependency>
 		<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-aop</artifactId>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-test</artifactId>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-core</artifactId>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-aop</artifactId>
-			</dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.13</version>
+		</dependency>
+
 	</dependencies>
 	<description>Wraps the indexing framework with semantics for discrete methods and event listener hooks, hiding some of the complexity and providing ways to mock and validate messages</description>
 </project>
