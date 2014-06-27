@@ -19,6 +19,22 @@
 			<artifactId>index</artifactId>
 			<type>jar</type>
 		</dependency>
+		<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-aop</artifactId>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-test</artifactId>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-core</artifactId>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-aop</artifactId>
+			</dependency>
 	</dependencies>
 	<description>Wraps the indexing framework with semantics for discrete methods and event listener hooks, hiding some of the complexity and providing ways to mock and validate messages</description>
 </project>
