@@ -132,11 +132,11 @@
 						<Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
 						<Bundle-Name>${project.artifactId}</Bundle-Name>
 						<Bundle-Version>${project.version}</Bundle-Version>
-						<Private-Package />
+						<Private-Package>org.irods.jargon.indexing.wrapper</Private-Package>
 						<Export-Package>org.irods.jargon.indexing.hive.metadata.*</Export-Package>
 						<Bundle-Activator>org.irods.jargon.indexing.hive.metadata.Activator</Bundle-Activator>
 						<Import-Package>
-							org.osgi.framework,org.irods.jargon.indexing.wrapper.*,*;resolution:=optional
+							org.osgi.framework,*;resolution:=optional
 						</Import-Package>
 						<Embed-Dependency />
 						<Embed-Transitive>true</Embed-Transitive>

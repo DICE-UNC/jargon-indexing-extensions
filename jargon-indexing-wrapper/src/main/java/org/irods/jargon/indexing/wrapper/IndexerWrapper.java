@@ -14,7 +14,7 @@ import databook.persistence.rule.rdf.ruleset.Messages;
  * complexity of indexing and provides a simple and testable POJO interaction
  * style.
  * 
- * @author root
+ * @author Mike Conway - DICE
  *
  */
 public class IndexerWrapper implements Indexer {
