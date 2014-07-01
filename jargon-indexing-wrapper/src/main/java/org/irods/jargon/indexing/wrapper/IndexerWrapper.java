@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import databook.listener.Indexer;
 import databook.listener.Scheduler;
 import databook.listener.service.IndexingService;
+import databook.persistence.rule.rdf.ruleset.Message;
 import databook.persistence.rule.rdf.ruleset.Messages;
 
 /**
@@ -41,7 +42,7 @@ public class IndexerWrapper implements Indexer {
 	}
 
 	@Override
-	public void messages(Messages messages) {
+	public void messages(final Messages messages) {
 		try {
 
 			log.info("messages:{}", messages);
@@ -52,6 +53,25 @@ public class IndexerWrapper implements Indexer {
 					"unknown exception occurred in indexer on processing of messages",
 					e);
 		}
+	}
+
+	/**
+	 * Framework method that will be called on the receipt of each message. This
+	 * will in turn call the appropriate event handler with the correctly parsed
+	 * message
+	 * 
+	 * @param message
+	 *            {@link Message} in a potential group of messages receieved
+	 * @param ofMessages
+	 *            {@link} the group of messages of which this message is a
+	 *            member, in cases where additional mining of information is
+	 *            required
+	 */
+	void onMessage(final Message message, final Messages ofMessages) {
+		// TODO: for now simply call the event here, think about adding a
+		// message handler that can interpret and plug it in here, may need to
+		// look at whole set of message to derive the right event? - MC
+
 	}
 
 	@Override
