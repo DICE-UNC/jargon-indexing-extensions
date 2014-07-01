@@ -132,33 +132,16 @@
 						<Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
 						<Bundle-Name>${project.artifactId}</Bundle-Name>
 						<Bundle-Version>${project.version}</Bundle-Version>
-						<Private-Package>org.irods.jargon.indexing.wrapper</Private-Package>
+						<Private-Package>org.irods.jargon.*</Private-Package>
 						<Export-Package>org.irods.jargon.indexing.hive.metadata.*</Export-Package>
 						<Bundle-Activator>org.irods.jargon.indexing.hive.metadata.Activator</Bundle-Activator>
 						<Import-Package>
-							org.osgi.framework,*;resolution:=optional
+							 org.osgi.framework,org.irods.jargon.*,*;resolution:=optional
 						</Import-Package>
-						<Embed-Dependency />
+						 <Embed-Dependency>jargon-indexing-wrapper;scope=compile|runtime</Embed-Dependency>
 						<Embed-Transitive>true</Embed-Transitive>
 					</instructions>
 				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-				</configuration>
-				<executions>
-					<execution>
-						<id>make-assembly</id> <!-- this is used for inheritance merges -->
-						<phase>package</phase> <!-- bind to the packaging phase -->
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 		<pluginManagement>

@@ -31,18 +31,13 @@ public class IndexerWrapper implements Indexer {
 
 	public void startup() {
 		log.info("startup()");
-		initializeListenersFromConfiguredBeans();
 		indexingService.regIndexer(this);
-		onStartup();
-	}
-
-	private void initializeListenersFromConfiguredBeans() {
-		log.info("initializeListenersFromConfiguredBeans()");
+		// onStartup();
 	}
 
 	public void shutdown() {
 		indexingService.unregIndexer(this);
-		onShutdown();
+		// onShutdown();
 	}
 
 	@Override
