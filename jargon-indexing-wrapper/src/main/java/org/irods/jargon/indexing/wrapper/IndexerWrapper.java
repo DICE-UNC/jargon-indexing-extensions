@@ -88,6 +88,10 @@ public class IndexerWrapper implements Indexer {
 		if (message.getOperation().equals(IndexingConstants.OPERATION_UNION)) {
 			log.info("process as a union");
 			processUnionOperation(message, ofMessages);
+		} else if (message.getOperation().equals(
+				IndexingConstants.OPERATION_DIFF)) {
+			log.info("process as a diff");
+			processDiffOperation(message, ofMessages);
 		} else {
 			log.info("message discarded as no relevant events are included");
 		}
@@ -113,7 +117,39 @@ public class IndexerWrapper implements Indexer {
 						AvuData avuData = AvuData.instance(avu.getAttribute(),
 								avu.getValue(), avu.getUnit());
 						addMetadataEvent.setAvuData(avuData);
+						this.onMetadataAdd(addMetadataEvent);
+					} catch (JargonException e) {
+						log.error("error", e);
+						throw new GeneralIndexerRuntimeException(
+								"jargon exception occurred processing AVU", e);
+					}
+				}
 
+			}
+		}
+
+	}
+
+	private void processDiffOperation(Message message, Messages ofMessages) {
+		log.info("processDiffOperation()");
+
+		// look at message part for a part that is the metadata
+
+		for (DataEntity part : message.getHasPart()) {
+			if (!part.getMetadata().isEmpty()) {
+
+				for (AVU avu : part.getMetadata()) {
+
+					log.info("process as AVU delete event{}", part);
+					MetadataEvent deleteMetadataEvent = new MetadataEvent();
+					deleteMetadataEvent.setActionsEnum(actionsEnum.DELETE);
+					deleteMetadataEvent.setIrodsAbsolutePath(part
+							.getDescription());
+					try {
+						AvuData avuData = AvuData.instance(avu.getAttribute(),
+								avu.getValue(), avu.getUnit());
+						deleteMetadataEvent.setAvuData(avuData);
+						this.onMetadataDelete(deleteMetadataEvent);
 					} catch (JargonException e) {
 						log.error("error", e);
 						throw new GeneralIndexerRuntimeException(
@@ -167,6 +203,17 @@ public class IndexerWrapper implements Indexer {
 	 *            {@link MetadataEvent} that has been encountered
 	 */
 	protected void onMetadataAdd(final MetadataEvent addMetadataEvent) {
+
+	}
+
+	/**
+	 * Extension point notified when an individual AVU has been deleted from a
+	 * data object or collection
+	 * 
+	 * @param addMetadataDelete
+	 *            {@link MetadataEvent} that has been encountered
+	 */
+	protected void onMetadataDelete(final MetadataEvent deleteMetadataEvent) {
 
 	}
 

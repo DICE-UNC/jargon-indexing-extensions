@@ -14,5 +14,6 @@ public class IndexingConstants {
 	}
 
 	public static final String OPERATION_UNION = "union";
+	public static final String OPERATION_DIFF = "diff";
 
 }

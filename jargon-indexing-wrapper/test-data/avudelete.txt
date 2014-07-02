@@ -1,0 +1,58 @@
+
+06:05:52,620 | INFO  | sumer[metaQueue] | IndexerWrapper                   | 194 - org.irods.jargon.hive-metadata-indexer - 1.0.0.SNAPSHOT | 
+messages:databook.persistence.rule.rdf.ruleset.Messages@3920f362[
+messages=[databook.persistence.rule.rdf.ruleset.Message@224ac43b
+	[operation=diff,
+		hasPart=[
+			databook.persistence.rule.rdf.ruleset.DataObject@5a990f13
+			[replica=[],additionalProperties={},replaces=<null>,replacedBy=<null>,hasVersion=<null>,dataSize=<null>,additionalProperties={},
+			id=<null>,type=<null>,description=<null>,title=<null>,created=<null>,submitted=<null>,related=[],hasPart=[],partOf=[],
+			accessHistory=<null>,accessPermission=[],
+			metadata=[],discussion=[],owner=<null>,contributor=[],likedBy=[],dislikedBy=[],tempInputStream=<null>,
+			storageLocationRequest=[],storageLocation=[],additionalProperties={},uri=/tempZone/home/test1/LICENSE.txt@1403891397,
+			typeUri=<null>,label=<null>,additionalProperties={}], 
+			
+			
+			databook.persistence.rule.rdf.ruleset.DataObject@76acd6dc
+				[replica=[],additionalProperties={},replaces=<null>,replacedBy=<null>,hasVersion=<null>,
+				dataSize=<null>,additionalProperties={},id=<null>,type=<null>,description=<null>,title=<null>,
+				created=<null>,submitted=<null>,related=[],hasPart=[],partOf=[],accessHistory=<null>,accessPermission=[],
+				metadata=[databook.persistence.rule.rdf.ruleset.AVU@4d4e4262[attribute=ffadsf,value=4ty34rt534r5235r,unit=,additionalProperties={},
+				id=<null>,type=<null>,description=<null>,title=<null>,created=<null>,submitted=<null>,related=[],hasPart=[],partOf=[],
+				accessHistory=<null>,accessPermission=[],metadata=[],discussion=[],owner=<null>,contributor=[],likedBy=[],
+				dislikedBy=[],tempInputStream=<null>,storageLocationRequest=[],storageLocation=[],
+				additionalProperties={},uri=<null>,typeUri=<null>,label=<null>,additionalProperties={}]],
+				discussion=[],owner=<null>,contributor=[],likedBy=[],dislikedBy=[],tempInputStream=<null>,storageLocationRequest=[],storageLocation=[],additionalProperties={},uri=<null>,typeUri=<null>,label=<null>,additionalProperties={}]],additionalProperties={}]],additionalProperties={},id=<null>,type=<null>,description=<null>,title=<null>,created=<null>,submitted=<null>,related=[],hasPart=[],partOf=[],accessHistory=<null>,accessPermission=[],metadata=[],discussion=[],owner=<null>,contributor=[],likedBy=[],dislikedBy=[],tempInputStream=<null>,storageLocationRequest=[],storageLocation=[],additionalProperties={},uri=<null>,typeUri=<null>,label=<null>,additionalProperties={}]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+06:05:52,635 | INFO  | sumer[metaQueue] | IndexerWrapper                   | 194 - org.irods.jargon.hive-metadata-indexer - 1.0.0.SNAPSHOT | onMessage:databook.persistence.rule.rdf.ruleset.Message@224ac43b[operation=diff,hasPart=[databook.persistence.rule.rdf.ruleset.DataObject@5a990f13[replica=[],additionalProperties={},replaces=<null>,replacedBy=<null>,hasVersion=<null>,dataSize=<null>,additionalProperties={},id=<null>,type=<null>,description=<null>,title=<null>,created=<null>,submitted=<null>,related=[],hasPart=[],partOf=[],accessHistory=<null>,accessPermission=[],metadata=[],discussion=[],owner=<null>,contributor=[],likedBy=[],dislikedBy=[],tempInputStream=<null>,storageLocationRequest=[],storageLocation=[],additionalProperties={},uri=/tempZone/home/test1/LICENSE.txt@1403891397,typeUri=<null>,label=<null>,additionalProperties={}], databook.persistence.rule.rdf.ruleset.DataObject@76acd6dc[replica=[],additionalProperties={},replaces=<null>,replacedBy=<null>,hasVersion=<null>,dataSize=<null>,additionalProperties={},id=<null>,type=<null>,description=<null>,title=<null>,created=<null>,submitted=<null>,related=[],hasPart=[],partOf=[],accessHistory=<null>,accessPermission=[],metadata=[databook.persistence.rule.rdf.ruleset.AVU@4d4e4262[attribute=ffadsf,value=4ty34rt534r5235r,unit=,additionalProperties={},id=<null>,type=<null>,description=<null>,title=<null>,created=<null>,submitted=<null>,related=[],hasPart=[],partOf=[],accessHistory=<null>,accessPermission=[],metadata=[],discussion=[],owner=<null>,contributor=[],likedBy=[],dislikedBy=[],tempInputStream=<null>,storageLocationRequest=[],storageLocation=[],additionalProperties={},uri=<null>,typeUri=<null>,label=<null>,additionalProperties={}]],discussion=[],owner=<null>,contributor=[],likedBy=[],dislikedBy=[],tempInputStream=<null>,storageLocationRequest=[],storageLocation=[],additionalProperties={},uri=<null>,typeUri=<null>,label=<null>,additionalProperties={}]],additionalProperties={}]
+06:05:52,636 | INFO  | sumer[metaQueue] | IndexerWrapper                   | 194 - org.irods.jargon.hive-metadata-indexer - 1.0.0.SNAPSHOT | check message operation:diff
+06:05:52,636 | INFO  | sumer[metaQueue] | IndexerWrapper                   | 194 - org.irods.jargon.hive-metadata-indexer - 1.0.0.SNAPSHOT | message discarded as no relevant events are included
+06:05:53,207 | INFO  | sumer[metaQueue] | IndexerWrapper                   | 194 - org.irods.jargon.hive-metadata-indexer - 1.0.0.SNAPSHOT | messages:databook.persistence.rule.rdf.ruleset.Messages@70fd70cd[messages=[databook.persistence.rule.rdf.ruleset.Message@ef8dcaf[operation=create,hasPart=[databook.persistence.rule.rdf.ruleset.Access@74606cd6[session=[],finished=<null>,linkingDataEntity=[],linkingUser=[],additionalProperties={linkedDataEntity=[{dataEntityLink=/tempZone/home/test1/LICENSE.txt@1403891397}], linkedUserEntity=[{userEntityLink=test1}]},replaces=<null>,replacedBy=<null>,hasVersion=<null>,dataSize=<null>,additionalProperties={},id=<null>,type=<null>,description=ffadsf metadata remove,title=metadata remove,created=Sat Jan 17 01:04:59 GMT-05:00 1970,submitted=<null>,related=[],hasPart=[],partOf=[databook.persistence.rule.rdf.ruleset.Session@6689914a[sessionPart=<null>,additionalProperties={},id=<null>,type=<null>,description=<null>,title=<null>,created=<null>,submitted=<null>,related=[],hasPart=[],partOf=[],accessHistory=<null>,accessPermission=[],metadata=[],discussion=[],owner=<null>,contributor=[],likedBy=[],dislikedBy=[],tempInputStream=<null>,storageLocationRequest=[],storageLocation=[],additionalProperties={},uri=Unspecified,typeUri=<null>,label=<null>,additionalProperties={}]],accessHistory=<null>,accessPermission=[],metadata=[],discussion=[],owner=<null>,contributor=[],likedBy=[],dislikedBy=[],tempInputStream=<null>,storageLocationRequest=[],storageLocation=[],additionalProperties={},uri=/tempZone/home/test1/LICENSE.txt@1403891397a1404299151metadata_remove,typeUri=<null>,label=<null>,additionalProperties={}]],additionalProperties={}]],additionalProperties={},id=<null>,type=<null>,description=<null>,title=<null>,created=<null>,submitted=<null>,related=[],hasPart=[],partOf=[],accessHistory=<null>,accessPermission=[],metadata=[],discussion=[],owner=<null>,contributor=[],likedBy=[],dislikedBy=[],tempInputStream=<null>,storageLocationRequest=[],storageLocation=[],additionalProperties={},uri=<null>,typeUri=<null>,label=<null>,additionalProperties={}]
+06:05:53,215 | INFO  | sumer[metaQueue] | IndexerWrapper                   | 194 - org.irods.jargon.hive-metadata-indexer - 1.0.0.SNAPSHOT | onMessage:databook.persistence.rule.rdf.ruleset.Message@ef8dcaf[operation=create,hasPart=[databook.persistence.rule.rdf.ruleset.Access@74606cd6[session=[],finished=<null>,linkingDataEntity=[],linkingUser=[],additionalProperties={linkedDataEntity=[{dataEntityLink=/tempZone/home/test1/LICENSE.txt@1403891397}], linkedUserEntity=[{userEntityLink=test1}]},replaces=<null>,replacedBy=<null>,hasVersion=<null>,dataSize=<null>,additionalProperties={},id=<null>,type=<null>,description=ffadsf metadata remove,title=metadata remove,created=Sat Jan 17 01:04:59 GMT-05:00 1970,submitted=<null>,related=[],hasPart=[],partOf=[databook.persistence.rule.rdf.ruleset.Session@6689914a[sessionPart=<null>,additionalProperties={},id=<null>,type=<null>,description=<null>,title=<null>,created=<null>,submitted=<null>,related=[],hasPart=[],partOf=[],accessHistory=<null>,accessPermission=[],metadata=[],discussion=[],owner=<null>,contributor=[],likedBy=[],dislikedBy=[],tempInputStream=<null>,storageLocationRequest=[],storageLocation=[],additionalProperties={},uri=Unspecified,typeUri=<null>,label=<null>,additionalProperties={}]],accessHistory=<null>,accessPermission=[],metadata=[],discussion=[],owner=<null>,contributor=[],likedBy=[],dislikedBy=[],tempInputStream=<null>,storageLocationRequest=[],storageLocation=[],additionalProperties={},uri=/tempZone/home/test1/LICENSE.txt@1403891397a1404299151metadata_remove,typeUri=<null>,label=<null>,additionalProperties={}]],additionalProperties={}]
+06:05:53,215 | INFO  | sumer[metaQueue] | IndexerWrapper                   | 194 - org.irods.jargon.hive-metadata-indexer - 1.0.0.SNAPSHOT | check message operation:create
+06:05:53,215 | INFO  | sumer[metaQueue] | IndexerWrapper                   | 194 - org.irods.jargon.hive-metadata-indexer - 1.0.0.SNAPSHOT | message discarded as no relevant events are included

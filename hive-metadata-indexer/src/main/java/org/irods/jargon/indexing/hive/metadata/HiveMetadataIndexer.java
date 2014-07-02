@@ -60,4 +60,23 @@ public class HiveMetadataIndexer extends IndexerWrapper {
 		return true; // FIXME: stub to accept everything
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.irods.jargon.indexing.wrapper.IndexerWrapper#onMetadataDelete(org
+	 * .irods.jargon.indexing.wrapper.event.MetadataEvent)
+	 */
+	@Override
+	protected void onMetadataDelete(MetadataEvent deleteMetadataEvent) {
+		log.info("HIVE avu delete?");
+
+		if (!isHiveAvu(deleteMetadataEvent)) {
+			log.info("ignored...not a HIVE AVU");
+			return;
+		}
+
+		log.info("process this as a HIVE AVU:{}", deleteMetadataEvent);
+	}
+
 }
