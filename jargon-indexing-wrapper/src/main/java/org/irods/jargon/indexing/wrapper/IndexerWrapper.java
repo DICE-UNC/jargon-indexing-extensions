@@ -1,11 +1,17 @@
 package org.irods.jargon.indexing.wrapper;
 
+import org.irods.jargon.core.exception.JargonException;
+import org.irods.jargon.core.pub.domain.AvuData;
+import org.irods.jargon.indexing.wrapper.IndexingConstants.actionsEnum;
+import org.irods.jargon.indexing.wrapper.event.MetadataEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import databook.listener.Indexer;
 import databook.listener.Scheduler;
 import databook.listener.service.IndexingService;
+import databook.persistence.rule.rdf.ruleset.AVU;
+import databook.persistence.rule.rdf.ruleset.DataEntity;
 import databook.persistence.rule.rdf.ruleset.Message;
 import databook.persistence.rule.rdf.ruleset.Messages;
 
@@ -33,12 +39,12 @@ public class IndexerWrapper implements Indexer {
 	public void startup() {
 		log.info("startup()");
 		indexingService.regIndexer(this);
-		// onStartup();
+		onStartup();
 	}
 
 	public void shutdown() {
 		indexingService.unregIndexer(this);
-		// onShutdown();
+		onShutdown();
 	}
 
 	@Override
@@ -46,6 +52,10 @@ public class IndexerWrapper implements Indexer {
 		try {
 
 			log.info("messages:{}", messages);
+
+			for (Message message : messages.getMessages()) {
+				onMessage(message, messages);
+			}
 
 		} catch (Exception e) {
 			log.error("error", e);
@@ -71,6 +81,48 @@ public class IndexerWrapper implements Indexer {
 		// TODO: for now simply call the event here, think about adding a
 		// message handler that can interpret and plug it in here, may need to
 		// look at whole set of message to derive the right event? - MC
+
+		log.info("onMessage:{}", message);
+
+		log.info("check message operation:{}", message.getOperation());
+		if (message.getOperation().equals(IndexingConstants.OPERATION_UNION)) {
+			log.info("process as a union");
+			processUnionOperation(message, ofMessages);
+		} else {
+			log.info("message discarded as no relevant events are included");
+		}
+
+	}
+
+	private void processUnionOperation(Message message, Messages ofMessages) {
+		log.info("processUnionOperation()");
+
+		// look at message part for a part that is the metadata
+
+		for (DataEntity part : message.getHasPart()) {
+			if (!part.getMetadata().isEmpty()) {
+
+				for (AVU avu : part.getMetadata()) {
+
+					log.info("process as AVU add event{}", part);
+					MetadataEvent addMetadataEvent = new MetadataEvent();
+					addMetadataEvent.setActionsEnum(actionsEnum.ADD);
+					addMetadataEvent
+							.setIrodsAbsolutePath(part.getDescription());
+					try {
+						AvuData avuData = AvuData.instance(avu.getAttribute(),
+								avu.getValue(), avu.getUnit());
+						addMetadataEvent.setAvuData(avuData);
+
+					} catch (JargonException e) {
+						log.error("error", e);
+						throw new GeneralIndexerRuntimeException(
+								"jargon exception occurred processing AVU", e);
+					}
+				}
+
+			}
+		}
 
 	}
 
@@ -104,6 +156,17 @@ public class IndexerWrapper implements Indexer {
 	 * Extension point for receiving shutdown notifications
 	 */
 	protected void onShutdown() {
+
+	}
+
+	/**
+	 * Extension point notified when an individual AVU has been added for a data
+	 * object or collection
+	 * 
+	 * @param addMetadataEvent
+	 *            {@link MetadataEvent} that has been encountered
+	 */
+	protected void onMetadataAdd(final MetadataEvent addMetadataEvent) {
 
 	}
 
