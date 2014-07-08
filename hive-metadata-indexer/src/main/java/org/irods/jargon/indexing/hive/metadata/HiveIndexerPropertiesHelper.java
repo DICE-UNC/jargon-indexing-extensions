@@ -13,7 +13,7 @@ import org.irods.jargon.hive.external.utils.JenaHiveConfiguration;
  * Helper class for understanding the indexer.properties file for HIVE
  * 
  * @author Mike Conway - DICE
- *
+ * 
  */
 public class HiveIndexerPropertiesHelper {
 
@@ -26,6 +26,23 @@ public class HiveIndexerPropertiesHelper {
 	public static String KEY_JENA_DB_URI = "indexer.jena.db.uri";
 	public static String KEY_JENA_DB_TYPE = "indexer.jena.db.type";
 	public static String KEY_IDROP_CONTEXT = "indexer.idrop.context";
+
+	/**
+	 * Dir for the preconfigured 'functional' testing hive built using the
+	 * HiveTestInstanceSetup utility
+	 */
+	public static final String TEST_HIVE_PARENT_DIR = "test.hive.parent.dir";
+
+	/**
+	 * Location of a source HIVE set of RDF and template config properties
+	 */
+	public static final String TEST_HIVE_SOURCE_DIR = "test.hive.source.dir";
+
+	/**
+	 * Location of a temp scratch directory under which any number of test HIVEs
+	 * can be built in different unit and funtional tests
+	 */
+	public static final String TEST_HIVE_SCRATCH_DIR = "test.hive.scratch.dir";
 
 	/**
 	 * @throws HiveIndexerConfigException

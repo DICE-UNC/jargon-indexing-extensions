@@ -31,7 +31,10 @@ import com.hp.hpl.jena.ontology.OntModel;
  * @author Mike Conway - DICE
  * 
  */
-public class HiveMetadataIndexerInitializerImpl implements HiveMetadataIndexer {
+
+// FIXME: how can I do a memory only model?
+
+public class HiveMetadataIndexerInitializerImpl implements HiveMetadataIndexerInitializer {
 
 	private final JenaHiveConfiguration jenaHiveConfiguration;
 	public static final Logger log = LoggerFactory
@@ -48,8 +51,13 @@ public class HiveMetadataIndexerInitializerImpl implements HiveMetadataIndexer {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see org.irods.jargon.indexing.hive.metadata.utils.HiveMetadataIndexer#initializeAndBatchIndexOntologyModel(org.irods.jargon.core.pub.IRODSAccessObjectFactory, org.irods.jargon.core.connection.IRODSAccount)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.irods.jargon.indexing.hive.metadata.utils.HiveMetadataIndexer#
+	 * initializeAndBatchIndexOntologyModel
+	 * (org.irods.jargon.core.pub.IRODSAccessObjectFactory,
+	 * org.irods.jargon.core.connection.IRODSAccount)
 	 */
 	@Override
 	public OntModel initializeAndBatchIndexOntologyModel(
@@ -78,8 +86,11 @@ public class HiveMetadataIndexerInitializerImpl implements HiveMetadataIndexer {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see org.irods.jargon.indexing.hive.metadata.utils.HiveMetadataIndexer#initializeBareOntologyModel()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.irods.jargon.indexing.hive.metadata.utils.HiveMetadataIndexer#
+	 * initializeBareOntologyModel()
 	 */
 	@Override
 	public OntModel initializeBareOntologyModel() throws HiveIndexerException {

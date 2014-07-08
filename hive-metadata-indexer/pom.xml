@@ -24,6 +24,12 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.irods.jargon</groupId>
+			<artifactId>jargon-hive</artifactId>
+			<type>jar</type>
+			<version>${hive.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.jena</groupId>
 			<artifactId>jena-sdb</artifactId>
 			<type>jar</type>
@@ -39,7 +45,7 @@
 			<artifactId>jargon-hive-3store-integration</artifactId>
 			<type>jar</type>
 			<version>${hive.version}</version>
-		</dependency>
+		</dependency>		
 	</dependencies>
 	<build>
 		<plugins>
@@ -82,10 +88,10 @@
 						<phase>validate</phase>
 						<configuration>
 							<tasks>
-								<delete file="${basedir}/src/test/resources/indexer.properties" />
-								<touch file="${basedir}/src/test/resources/indexer.properties"
+								<delete file="${basedir}/src/test/resources/hive.testing.properties" />
+								<touch file="${basedir}/src/test/resources/hive.testing.properties"
 									mkdirs="true" />
-								<echo file="${basedir}/src/test/resources/indexer.properties"
+								<echo file="${basedir}/src/test/resources/hive.testing.properties"
 									append="true">
 									indexer.irodsRdfPath=${indexer.irodsRdfPath}
 									indexer.jena.db.driver.class=${indexer.jena.db.driver.class}
@@ -154,9 +160,9 @@
 						<Export-Package>org.irods.jargon.indexing.hive.metadata.*</Export-Package>
 						<Bundle-Activator>org.irods.jargon.indexing.hive.metadata.Activator</Bundle-Activator>
 						<Import-Package>
-							 org.osgi.framework,org.irods.jargon.*,*;resolution:=optional
+							org.osgi.framework,org.irods.jargon.*,*;resolution:=optional
 						</Import-Package>
-						 <Embed-Dependency>jargon-indexing-wrapper;scope=compile|runtime</Embed-Dependency>
+						<Embed-Dependency>jargon-indexing-wrapper;scope=compile|runtime</Embed-Dependency>
 						<Embed-Transitive>true</Embed-Transitive>
 					</instructions>
 				</configuration>

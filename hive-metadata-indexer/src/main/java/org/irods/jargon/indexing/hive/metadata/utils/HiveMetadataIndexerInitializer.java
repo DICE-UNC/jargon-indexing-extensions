@@ -13,7 +13,7 @@ import com.hp.hpl.jena.ontology.OntModel;
  * @author Mike Conway - DICE
  * 
  */
-public interface HiveMetadataIndexer {
+public interface HiveMetadataIndexerInitializer {
 
 	/**
 	 * Initialize an index triple store and do a batch indexing of iRODS
