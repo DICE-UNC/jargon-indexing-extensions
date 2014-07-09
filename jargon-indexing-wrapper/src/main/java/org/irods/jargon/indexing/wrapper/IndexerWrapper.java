@@ -22,7 +22,7 @@ import databook.persistence.rule.rdf.ruleset.Messages;
  * style.
  * 
  * @author Mike Conway - DICE
- *
+ * 
  */
 public class IndexerWrapper implements Indexer {
 

@@ -188,7 +188,7 @@
 				<groupId>databook</groupId>
 				<artifactId>index</artifactId>
 				<version>${indexing.version}</version>
-				<type>jar</type>
+				<type>bundle</type>
 			</dependency>
 			<dependency>
 				<groupId>log4j</groupId>
