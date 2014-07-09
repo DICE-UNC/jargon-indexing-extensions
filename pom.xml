@@ -243,6 +243,26 @@
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
+	    <dependency>
+				<groupId>databook</groupId>
+				<artifactId>index</artifactId>
+				<version>${indexing.version}</version>
+				<type>jar</type>
+				<exclusions>
+				<exclusion>
+					<groupId>org.sl4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.sl4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+				<exclusion>
+					<artifactId>slf4j-simple</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
+			</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>

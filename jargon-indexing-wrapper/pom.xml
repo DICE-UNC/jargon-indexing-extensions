@@ -15,11 +15,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>databook</groupId>
-			<artifactId>index</artifactId>
-			<type>jar</type>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aop</artifactId>
 		</dependency>
