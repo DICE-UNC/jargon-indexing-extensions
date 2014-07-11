@@ -112,6 +112,19 @@
 				<checksumPolicy>fail</checksumPolicy>
 			</snapshots>
 		</repository>
+		<repository>
+			<id>aduna-opensource.releases</id>
+			<name>Aduna Open Source - Maven releases</name>
+			<url>http://build.mygrid.org.uk/maven/old/aduna</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</snapshots>
+		</repository>
 	</repositories>
 	<distributionManagement>
 		<repository>

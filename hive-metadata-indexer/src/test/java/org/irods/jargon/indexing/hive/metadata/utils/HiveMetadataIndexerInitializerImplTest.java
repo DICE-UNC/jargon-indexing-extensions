@@ -2,6 +2,7 @@ package org.irods.jargon.indexing.hive.metadata.utils;
 
 import static org.junit.Assert.fail;
 
+import java.io.File;
 import java.util.Properties;
 
 import junit.framework.Assert;
@@ -20,7 +21,7 @@ import com.hp.hpl.jena.ontology.OntModel;
 public class HiveMetadataIndexerInitializerImplTest {
 
 	private static Properties testingProperties = new Properties();
-	private static org.irods.jargon.testutils.TestingPropertiesHelper testingPropertiesHelper = new TestingPropertiesHelper();
+	private static TestingPropertiesHelper testingPropertiesHelper = new TestingPropertiesHelper();
 	private static org.irods.jargon.testutils.filemanip.ScratchFileUtils scratchFileUtils = null;
 	public static final String IRODS_TEST_SUBDIR_PATH = "HiveMetadataIndexerInitializerImplTest";
 	private static org.irods.jargon.testutils.IRODSTestSetupUtilities irodsTestSetupUtilities = null;
@@ -73,6 +74,11 @@ public class HiveMetadataIndexerInitializerImplTest {
 				.buildJenaUriForTempDirectory(testingProperties, subdir));
 		jenaHiveConfiguration.setJenaDbUser(testingProperties
 				.getProperty(HiveIndexerPropertiesHelper.KEY_JENA_DB_USER));
+		
+		
+		File uatVocab = VocabularyUtils.getClasspathResourceAsFile("uat.rdf");
+		
+		jenaHiveConfiguration.getVocabularyRDFFileNames().add(uatVocab.getAbsolutePath());
 
 		HiveMetadataIndexerInitializer initializer = new HiveMetadataIndexerInitializerImpl(
 				jenaHiveConfiguration);

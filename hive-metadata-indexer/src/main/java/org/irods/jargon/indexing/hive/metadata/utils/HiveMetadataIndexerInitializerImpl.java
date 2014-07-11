@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.rdf.model.Model;
 
 /**
  * Convenience service that can initialize a HIVE based triple store for use by
@@ -50,7 +51,7 @@ public class HiveMetadataIndexerInitializerImpl implements HiveMetadataIndexerIn
 		this.jenaHiveConfiguration = jenaHiveConfiguration;
 
 	}
-
+   
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -84,7 +85,7 @@ public class HiveMetadataIndexerInitializerImpl implements HiveMetadataIndexerIn
 			throw new HiveIndexerException("error in batch indexing process", e);
 		}
 
-	}
+	} 
 
 	/*
 	 * (non-Javadoc)
