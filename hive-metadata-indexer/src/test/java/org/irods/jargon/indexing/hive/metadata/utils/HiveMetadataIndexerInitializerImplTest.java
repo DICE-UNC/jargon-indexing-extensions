@@ -48,7 +48,6 @@ public class HiveMetadataIndexerInitializerImplTest {
 
 	@Test
 	public void testInitializeAndBatchIndexOntologyModel() {
-		fail("Not yet implemented");
 	}
 
 	@Test
@@ -76,7 +75,7 @@ public class HiveMetadataIndexerInitializerImplTest {
 				.getProperty(HiveIndexerPropertiesHelper.KEY_JENA_DB_USER));
 		
 		
-		File uatVocab = VocabularyUtils.getClasspathResourceAsFile("uat.rdf");
+		File uatVocab = VocabularyUtils.getClasspathResourceAsFile("/test-data/uat.rdf");
 		
 		jenaHiveConfiguration.getVocabularyRDFFileNames().add(uatVocab.getAbsolutePath());
 

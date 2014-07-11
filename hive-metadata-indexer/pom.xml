@@ -134,10 +134,10 @@
 						<phase>validate</phase>
 						<configuration>
 							<tasks>
-								<delete file="${basedir}/src/test/resources/testing.properties" />
-								<touch file="${basedir}/src/test/resources/testing.properties"
+								<delete file="${basedir}/src/test/resources/hive.testing.properties" />
+								<touch file="${basedir}/src/test/resources/hive.testing.properties"
 									mkdirs="true" />
-								<echo file="${basedir}/src/test/resources/testing.properties"
+								<echo file="${basedir}/src/test/resources/hive.testing.properties"
 									append="true">
 									indexer.irodsRdfPath=${indexer.irodsRdfPath}
 									indexer.jena.db.driver.class=${indexer.jena.db.driver.class}
