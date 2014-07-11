@@ -7,7 +7,10 @@ import java.util.Properties;
 
 import junit.framework.Assert;
 
+import org.irods.jargon.core.connection.IRODSAccount;
+import org.irods.jargon.core.exception.JargonException;
 import org.irods.jargon.core.pub.IRODSFileSystem;
+import org.irods.jargon.hive.external.indexer.HiveIndexerException;
 import org.irods.jargon.hive.external.utils.JenaHiveConfiguration;
 import org.irods.jargon.indexing.hive.metadata.HiveIndexerPropertiesHelper;
 import org.irods.jargon.indexing.hive.metadata.utils.testing.HiveMetadataIndexerTestSetupUtils;
@@ -47,7 +50,38 @@ public class HiveMetadataIndexerInitializerImplTest {
 	}
 
 	@Test
-	public void testInitializeAndBatchIndexOntologyModel() {
+	public void testInitializeAndBatchIndexOntologyModel() throws Exception {
+		
+		String subdir = "testInitializeAndBatchIndexOntologyModel";
+		IRODSAccount irodsAccount = testingPropertiesHelper
+				.buildIRODSAccountFromTestProperties(testingProperties);
+
+		HiveMetadataIndexerTestSetupUtils.deleteJenaSubdir(testingProperties,
+				subdir);
+
+		JenaHiveConfiguration jenaHiveConfiguration = new JenaHiveConfiguration();
+		jenaHiveConfiguration.setAutoCloseJenaModel(false);
+		jenaHiveConfiguration.setIdropContext(testingProperties
+				.getProperty(HiveIndexerPropertiesHelper.KEY_IDROP_CONTEXT));
+		jenaHiveConfiguration.setIrodsRDFFileName(testingProperties
+				.getProperty(HiveIndexerPropertiesHelper.KEY_IRODS_RDF));
+		jenaHiveConfiguration.setJenaDbDriverClass(testingProperties
+				.getProperty(HiveIndexerPropertiesHelper.KEY_JENA_DB_DRIVER));
+		jenaHiveConfiguration.setJenaDbPassword(testingProperties
+				.getProperty(HiveIndexerPropertiesHelper.KEY_JENA_DB_PASSWORD));
+		jenaHiveConfiguration.setJenaDbType(testingProperties
+				.getProperty(HiveIndexerPropertiesHelper.KEY_JENA_DB_TYPE));
+		jenaHiveConfiguration.setJenaDbUri(HiveMetadataIndexerTestSetupUtils
+				.buildJenaUriForTempDirectory(testingProperties, subdir));
+		jenaHiveConfiguration.setJenaDbUser(testingProperties
+				.getProperty(HiveIndexerPropertiesHelper.KEY_JENA_DB_USER));
+		
+		HiveMetadataIndexerInitializer initializer = new HiveMetadataIndexerInitializerImpl(
+				jenaHiveConfiguration);
+
+		OntModel ontModel = initializer.initializeAndBatchIndexOntologyModel(irodsFileSystem.getIRODSAccessObjectFactory(), irodsAccount);
+		Assert.assertNotNull("null ontModel returned");
+		ontModel.close();
 	}
 
 	@Test
