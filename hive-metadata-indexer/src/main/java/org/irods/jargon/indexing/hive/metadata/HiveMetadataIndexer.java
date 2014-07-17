@@ -3,6 +3,8 @@
  */
 package org.irods.jargon.indexing.hive.metadata;
 
+import org.irods.jargon.hive.external.utils.JenaHiveConfiguration;
+import org.irods.jargon.hive.irods.IRODSHiveService;
 import org.irods.jargon.indexing.wrapper.IndexerWrapper;
 import org.irods.jargon.indexing.wrapper.event.MetadataEvent;
 import org.slf4j.Logger;
@@ -12,12 +14,14 @@ import org.slf4j.LoggerFactory;
  * Indexer responds to metadata updates to maintain a triple store of iRODS data
  * 
  * @author Mike Conway - DICE
- *
+ * 
  */
 public class HiveMetadataIndexer extends IndexerWrapper {
 
 	public static final Logger log = LoggerFactory
 			.getLogger(IndexerWrapper.class);
+
+	private JenaHiveConfiguration jenaHiveConfiguration;
 
 	/*
 	 * (non-Javadoc)
@@ -29,7 +33,6 @@ public class HiveMetadataIndexer extends IndexerWrapper {
 		log.info(">>>>>>>>> startup of hive metadata indexer");
 		log.info("HIVE indexer version:{}", HiveIndexerVersion.VERSION);
 		log.info("HIVE indexer build time:{}", HiveIndexerVersion.BUILD_TIME);
-
 	}
 
 	/*
@@ -57,7 +60,12 @@ public class HiveMetadataIndexer extends IndexerWrapper {
 	}
 
 	private boolean isHiveAvu(MetadataEvent addMetadataEvent) {
-		return true; // FIXME: stub to accept everything
+		if (addMetadataEvent.getAvuData().getUnit()
+				.equals(IRODSHiveService.VOCABULARY_AVU_UNIT)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/*
@@ -77,6 +85,15 @@ public class HiveMetadataIndexer extends IndexerWrapper {
 		}
 
 		log.info("process this as a HIVE AVU:{}", deleteMetadataEvent);
+	}
+
+	public JenaHiveConfiguration getJenaHiveConfiguration() {
+		return jenaHiveConfiguration;
+	}
+
+	public void setJenaHiveConfiguration(
+			JenaHiveConfiguration jenaHiveConfiguration) {
+		this.jenaHiveConfiguration = jenaHiveConfiguration;
 	}
 
 }

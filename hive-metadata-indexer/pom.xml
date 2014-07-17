@@ -139,16 +139,6 @@
 									mkdirs="true" />
 								<echo file="${basedir}/src/test/resources/hive.testing.properties"
 									append="true">
-									indexer.irodsRdfPath=${indexer.irodsRdfPath}
-									indexer.jena.db.driver.class=${indexer.jena.db.driver.class}
-									indexer.jena.db.password=${indexer.jena.db.password}
-									indexer.jena.db.uri=${indexer.jena.db.uri}
-									indexer.jena.db.user=${indexer.jena.db.user}
-									indexer.jena.db.type=${indexer.jena.db.type}
-									indexer.idrop.context=${indexer.idrop.context}
-									test.hive.source.dir=${test.hive.source.dir}
-									test.hive.parent.dir=${test.hive.parent.dir}
-									test.hive.scratch.dir=${test.hive.scratch.dir}
 									test.data.directory=${jargon.test.data.directory}
 									test.irods.admin=${jargon.test.irods.admin}
 									test.irods.admin.password=${jargon.test.irods.admin.password}
@@ -164,6 +154,16 @@
 									test.irods.host=${jargon.test.irods.host}
 									test.irods.port=${jargon.test.irods.port}
 									test.irods.zone=${jargon.test.irods.zone}
+									test.irods.scratch.subdir=${jargon.test.irods.scratch.subdir}
+									indexer.irodsRdfPath=${indexer.irodsRdfPath}
+									indexer.jena.db.driver.class=${indexer.jena.db.driver.class}
+									indexer.jena.db.password=${indexer.jena.db.password}
+									indexer.jena.db.user=${indexer.jena.db.user}
+									indexer.jena.db.uri=${indexer.jena.db.uri}
+									indexer.jena.db.uri.prefix=${indexer.jena.db.uri.prefix}
+									indexer.jena.db.uri.suffix=${indexer.jena.db.uri.suffix}
+									indexer.jena.db.type=${indexer.jena.db.type}
+									indexer.idrop.context=${indexer.idrop.context}
 								</echo>
 							</tasks>
 						</configuration>

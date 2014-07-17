@@ -4,16 +4,15 @@
 		<profile>
 			<id>indexer</id>
 			<properties>
-				<indexer.irodsRdfPath>/jargon-hive-3store-integration/src/main/resources/irodsSchema.xml
-				</indexer.irodsRdfPath>
-				<indexer.jena.db.driver.class>org.apache.derby.jdbc.EmbeddedDriver
-				</indexer.jena.db.driver.class>
+				<indexer.irodsRdfPath>C:/Users/Mike/Documents/workspace-indexing/irods-hive/hive-master/jargon-hive-3store-integration/src/main/resources/irodsSchema.xml</indexer.irodsRdfPath>
+				<indexer.jena.db.driver.class>org.apache.derby.jdbc.EmbeddedDriver</indexer.jena.db.driver.class>
 				<indexer.jena.db.password>index</indexer.jena.db.password>
-				<indexer.jena.db.uri>blah</indexer.jena.db.uri>
+				<indexer.jena.db.uri>jdbc:derby:C:/temp/hive-indexer-test/derby;create=true</indexer.jena.db.uri>
 				<indexer.jena.db.user>index</indexer.jena.db.user>
 				<indexer.jena.db.type>Derby</indexer.jena.db.type>
-				<indexer.idrop.context>http://localhost:8080/idrop-web2/
-				</indexer.idrop.context>
+				<indexer.idrop.context>http://localhost:8080/idrop-web2/</indexer.idrop.context>
+				<indexer.jena.db.uri.prefix>jdbc:derby:</indexer.jena.db.uri.prefix>
+				<indexer.jena.db.uri.suffix>;create=true</indexer.jena.db.uri.suffix>
 			</properties>
 		</profile>
 
