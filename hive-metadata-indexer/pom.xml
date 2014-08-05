@@ -134,10 +134,10 @@
 						<phase>validate</phase>
 						<configuration>
 							<tasks>
-								<delete file="${basedir}/src/test/resources/hive.testing.properties" />
-								<touch file="${basedir}/src/test/resources/hive.testing.properties"
+								<delete file="${basedir}/src/test/resources/testing.properties" />
+								<touch file="${basedir}/src/test/resources/testing.properties"
 									mkdirs="true" />
-								<echo file="${basedir}/src/test/resources/hive.testing.properties"
+								<echo file="${basedir}/src/test/resources/testing.properties"
 									append="true">
 									test.data.directory=${jargon.test.data.directory}
 									test.irods.admin=${jargon.test.irods.admin}

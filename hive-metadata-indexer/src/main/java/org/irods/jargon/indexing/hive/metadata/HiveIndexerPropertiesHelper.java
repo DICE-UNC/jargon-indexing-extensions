@@ -86,14 +86,14 @@ public class HiveIndexerPropertiesHelper {
 
 	private Properties loadProps() throws HiveIndexerConfigException {
 		ClassLoader loader = this.getClass().getClassLoader();
-		InputStream in = loader.getResourceAsStream("hive.testing.properties");
+		InputStream in = loader.getResourceAsStream("testing.properties");
 		Properties properties = new Properties();
 
 		try {
 			properties.load(in);
 		} catch (IOException ioe) {
 			throw new HiveIndexerConfigException(
-					"error loading indexer.properties", ioe);
+					"error loading testing.properties", ioe);
 		} finally {
 			try {
 				in.close();
