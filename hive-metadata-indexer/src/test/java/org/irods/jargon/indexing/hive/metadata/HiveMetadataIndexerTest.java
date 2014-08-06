@@ -1,5 +1,6 @@
 package org.irods.jargon.indexing.hive.metadata;
 
+import java.net.URI;
 import java.util.Properties;
 
 import junit.framework.Assert;
@@ -10,6 +11,7 @@ import org.irods.jargon.core.pub.domain.AvuData;
 import org.irods.jargon.core.pub.io.IRODSFile;
 import org.irods.jargon.core.query.CollectionAndDataObjectListingEntry.ObjectType;
 import org.irods.jargon.core.query.MetaDataAndDomainData.MetadataDomain;
+import org.irods.jargon.core.utils.IRODSUriUtils;
 import org.irods.jargon.hive.external.indexer.modelservice.IrodsJenaModelUpdater;
 import org.irods.jargon.hive.external.utils.JargonHiveConfigurationHelper;
 import org.irods.jargon.hive.external.utils.JenaHiveConfiguration;
@@ -25,7 +27,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.ontology.OntResource;
+import com.hp.hpl.jena.rdf.model.Property;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 
 public class HiveMetadataIndexerTest {
 
@@ -117,26 +121,48 @@ public class HiveMetadataIndexerTest {
 		hiveMetadataIndexer.setOntModel(ontModel);
 		hiveMetadataIndexer.setModelUpdater(modelUpdater);
 
-		AvuData avuData = AvuData.instance(
-				"http://a.vocabulary#term",
-				"vocabulary=agrovoc|preferredLabel=testOnMetadataAdd|comment=comment",
-				"iRODSUserTagging:HIVE:VocabularyTerm");
-		
+		AvuData avuData = AvuData
+				.instance(
+						"http://a.vocabulary#term",
+						"vocabulary=agrovoc|preferredLabel=testOnMetadataAdd|comment=comment",
+						"iRODSUserTagging:HIVE:VocabularyTerm");
+
 		MetadataEvent metadataEvent = new MetadataEvent();
 		metadataEvent.setActionsEnum(actionsEnum.ADD);
 		metadataEvent.setAvuData(avuData);
 		metadataEvent.setIrodsAbsolutePath(targetIrodsCollection);
 		metadataEvent.setObjectType(ObjectType.COLLECTION);
-		
-		hiveMetadataIndexer.onMetadataAdd(metadataEvent);
-		
-		// read back the resource
-		
-		OntResource irodsCollResc = (OntResource) ontModel.getResource(testURI);
-		Assert.assertNotNull("no resc found in model", irodsCollResc);
-		
-		
 
+		hiveMetadataIndexer.onMetadataAdd(metadataEvent);
+
+		URI irodsUri = IRODSUriUtils
+				.buildURIForAnAccountWithNoUserInformationIncluded(
+						irodsAccount, targetIrodsCollection);
+
+		// read back the resource
+
+		Resource irodsCollResc = ontModel.getResource(irodsUri.toString());
+		Assert.assertNotNull("no resc found in model", irodsCollResc);
+
+		ontModel.write(System.out);
+		Property correspondingConceptProp = ontModel
+				.getProperty("http://www.irods.org/ontologies/2013/2/iRODS.owl#"
+						+ "correspondingConcept");
+
+		StmtIterator iter = irodsCollResc.listProperties();
+
+		while (iter.hasNext()) {
+			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>> iter next:"
+					+ iter.nextStatement());
+		}
+
+		iter = ontModel.listStatements();
+
+		while (iter.hasNext()) {
+			System.out
+					.println(">>>>>>>>>>>>>>>>>>>>>>>> whole model iter next:"
+							+ iter.nextStatement());
+		}
 
 	}
 

@@ -11,7 +11,7 @@
 	<url>https://github.com/DICE-UNC/jargon-indexing-extensions</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jargon.version>4.0.2.2-SNAPSHOT</jargon.version>
+		<jargon.version>4.0.3-SNAPSHOT</jargon.version>
 		<sl4j.version>1.6.6</sl4j.version>
 		<log4j.version>1.2.16</log4j.version>
 		<indexing.version>0.0.1-SNAPSHOT</indexing.version>
