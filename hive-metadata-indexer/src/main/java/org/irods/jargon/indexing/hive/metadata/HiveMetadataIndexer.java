@@ -24,9 +24,9 @@ import com.hp.hpl.jena.ontology.OntModel;
 
 /**
  * Indexer responds to metadata updates to maintain a triple store of iRODS data
- *
+ * 
  * @author Mike Conway - DICE
- *
+ * 
  */
 public class HiveMetadataIndexer extends IndexerWrapper {
 
@@ -41,7 +41,7 @@ public class HiveMetadataIndexer extends IndexerWrapper {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.irods.jargon.indexing.wrapper.IndexerWrapper#onStartup()
 	 */
 	@Override
@@ -85,7 +85,7 @@ public class HiveMetadataIndexer extends IndexerWrapper {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see org.irods.jargon.indexing.wrapper.IndexerWrapper#onShutdown()
 	 */
 	@Override
@@ -128,7 +128,7 @@ public class HiveMetadataIndexer extends IndexerWrapper {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see
 	 * org.irods.jargon.indexing.wrapper.IndexerWrapper#onMetadataDelete(org
 	 * .irods.jargon.indexing.wrapper.event.MetadataEvent)
