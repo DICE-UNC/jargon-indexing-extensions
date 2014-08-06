@@ -2,9 +2,13 @@ package org.irods.jargon.indexing.hive.metadata;
 
 import java.util.Properties;
 
+import junit.framework.Assert;
+
 import org.irods.jargon.core.connection.IRODSAccount;
 import org.irods.jargon.core.pub.IRODSFileSystem;
+import org.irods.jargon.core.pub.domain.AvuData;
 import org.irods.jargon.core.pub.io.IRODSFile;
+import org.irods.jargon.core.query.CollectionAndDataObjectListingEntry.ObjectType;
 import org.irods.jargon.core.query.MetaDataAndDomainData.MetadataDomain;
 import org.irods.jargon.hive.external.indexer.modelservice.IrodsJenaModelUpdater;
 import org.irods.jargon.hive.external.utils.JargonHiveConfigurationHelper;
@@ -13,12 +17,15 @@ import org.irods.jargon.hive.external.utils.JenaModelManager;
 import org.irods.jargon.hive.irods.HiveVocabularyEntry;
 import org.irods.jargon.hive.irods.IRODSHiveService;
 import org.irods.jargon.hive.irods.IRODSHiveServiceImpl;
+import org.irods.jargon.indexing.wrapper.IndexingConstants.actionsEnum;
+import org.irods.jargon.indexing.wrapper.event.MetadataEvent;
 import org.irods.jargon.testutils.TestingPropertiesHelper;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.ontology.OntResource;
 
 public class HiveMetadataIndexerTest {
 
@@ -36,11 +43,12 @@ public class HiveMetadataIndexerTest {
 		testingProperties = testingPropertiesLoader.getProperties();
 		scratchFileUtils = new org.irods.jargon.testutils.filemanip.ScratchFileUtils(
 				testingProperties);
-		scratchFileUtils.clearAndReinitializeScratchDirectory(IRODS_TEST_SUBDIR_PATH);
+		scratchFileUtils
+				.clearAndReinitializeScratchDirectory(IRODS_TEST_SUBDIR_PATH);
 		irodsTestSetupUtilities = new org.irods.jargon.testutils.IRODSTestSetupUtilities();
 		irodsTestSetupUtilities.initializeIrodsScratchDirectory();
 		irodsTestSetupUtilities
-		.initializeDirectoryForTest(IRODS_TEST_SUBDIR_PATH);
+				.initializeDirectoryForTest(IRODS_TEST_SUBDIR_PATH);
 		irodsFileSystem = IRODSFileSystem.instance();
 	}
 
@@ -51,7 +59,7 @@ public class HiveMetadataIndexerTest {
 
 	@Test
 	public void testOnMetadataAdd() throws Exception {
-		
+
 		String testCollection = "testOnMetadataAdd";
 		String testVocabTerm = testCollection;
 		String testURI = "http://a.vocabulary#term";
@@ -59,10 +67,11 @@ public class HiveMetadataIndexerTest {
 				.buildIRODSAccountFromTestProperties(testingProperties);
 		IRODSHiveService irodsHiveService = new IRODSHiveServiceImpl(
 				irodsFileSystem.getIRODSAccessObjectFactory(), irodsAccount);
-		
-		String targetDb = scratchFileUtils.createAndReturnAbsoluteScratchPath(IRODS_TEST_SUBDIR_PATH + "/" + testCollection);
 
-		
+		String targetDb = scratchFileUtils
+				.createAndReturnAbsoluteScratchPath(IRODS_TEST_SUBDIR_PATH
+						+ "/" + testCollection);
+
 		String targetIrodsCollection = testingPropertiesHelper
 				.buildIRODSCollectionAbsolutePathFromTestProperties(
 						testingProperties, IRODS_TEST_SUBDIR_PATH + "/"
@@ -81,16 +90,19 @@ public class HiveMetadataIndexerTest {
 		entry.setVocabularyName("agrovoc");
 
 		irodsHiveService.saveOrUpdateVocabularyTerm(entry);
-		JenaHiveConfiguration jenaHiveConfiguration = JargonHiveConfigurationHelper.buildJenaHiveConfigurationFromProperties(testingProperties);
-		
-		// sub in a temp database 
+		JenaHiveConfiguration jenaHiveConfiguration = JargonHiveConfigurationHelper
+				.buildJenaHiveConfigurationFromProperties(testingProperties);
+
+		// sub in a temp database
 		StringBuilder sb = new StringBuilder();
-		sb.append(testingProperties.getProperty(JargonHiveConfigurationHelper.INDEXER_DB_URI_PREFIX));
+		sb.append(testingProperties
+				.getProperty(JargonHiveConfigurationHelper.INDEXER_DB_URI_PREFIX));
 		sb.append(targetDb);
 		sb.append("data");
-		sb.append(testingProperties.getProperty(JargonHiveConfigurationHelper.INDEXER_DB_URI_SUFFIX));
+		sb.append(testingProperties
+				.getProperty(JargonHiveConfigurationHelper.INDEXER_DB_URI_SUFFIX));
 		jenaHiveConfiguration.setJenaDbUri(sb.toString());
-		
+
 		HiveMetadataIndexer hiveMetadataIndexer = new HiveMetadataIndexer();
 		hiveMetadataIndexer.setIndexerAccount(irodsAccount);
 		hiveMetadataIndexer.setIrodsFileSystem(irodsFileSystem);
@@ -99,15 +111,33 @@ public class HiveMetadataIndexerTest {
 		OntModel ontModel = jenaModelManager
 				.buildJenaDatabaseModel(jenaHiveConfiguration);
 		IrodsJenaModelUpdater modelUpdater = new IrodsJenaModelUpdater(
-				irodsFileSystem.getIRODSAccessObjectFactory(),
-				irodsAccount, ontModel, jenaHiveConfiguration);
-		
-		
+				irodsFileSystem.getIRODSAccessObjectFactory(), irodsAccount,
+				ontModel, jenaHiveConfiguration);
+
 		hiveMetadataIndexer.setOntModel(ontModel);
 		hiveMetadataIndexer.setModelUpdater(modelUpdater);
+
+		AvuData avuData = AvuData.instance(
+				"http://a.vocabulary#term",
+				"vocabulary=agrovoc|preferredLabel=testOnMetadataAdd|comment=comment",
+				"iRODSUserTagging:HIVE:VocabularyTerm");
+		
+		MetadataEvent metadataEvent = new MetadataEvent();
+		metadataEvent.setActionsEnum(actionsEnum.ADD);
+		metadataEvent.setAvuData(avuData);
+		metadataEvent.setIrodsAbsolutePath(targetIrodsCollection);
+		metadataEvent.setObjectType(ObjectType.COLLECTION);
+		
+		hiveMetadataIndexer.onMetadataAdd(metadataEvent);
+		
+		// read back the resource
+		
+		OntResource irodsCollResc = (OntResource) ontModel.getResource(testURI);
+		Assert.assertNotNull("no resc found in model", irodsCollResc);
 		
 		
-		
+
+
 	}
 
 }
