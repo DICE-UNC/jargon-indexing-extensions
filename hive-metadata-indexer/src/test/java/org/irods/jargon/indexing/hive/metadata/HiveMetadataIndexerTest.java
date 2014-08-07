@@ -27,7 +27,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Resource;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 
@@ -62,9 +61,9 @@ public class HiveMetadataIndexerTest {
 	}
 
 	@Test
-	public void testOnMetadataAdd() throws Exception {
+	public void testOnMetadataAddCollection() throws Exception {
 
-		String testCollection = "testOnMetadataAdd";
+		String testCollection = "testOnMetadataAddCollection";
 		String testVocabTerm = testCollection;
 		String testURI = "http://a.vocabulary#term";
 		IRODSAccount irodsAccount = testingPropertiesHelper
@@ -145,9 +144,106 @@ public class HiveMetadataIndexerTest {
 		Assert.assertNotNull("no resc found in model", irodsCollResc);
 
 		ontModel.write(System.out);
-		Property correspondingConceptProp = ontModel
-				.getProperty("http://www.irods.org/ontologies/2013/2/iRODS.owl#"
-						+ "correspondingConcept");
+		
+		StmtIterator iter = irodsCollResc.listProperties();
+
+		while (iter.hasNext()) {
+			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>> iter next:"
+					+ iter.nextStatement());
+		}
+
+		iter = ontModel.listStatements();
+
+		boolean haveData = iter.hasNext();
+		Assert.assertTrue("didnt add data", haveData);
+
+	}
+	
+	@Test
+	public void testOnMetadataAddDataObject() throws Exception {
+
+		String testCollection = "testOnMetadataAddDataObject";
+
+		String testFile = "testOnMetadataAddDataObject.txt";
+		String testVocabTerm = testFile;
+		String testURI = "http://a.vocabulary#term";
+		IRODSAccount irodsAccount = testingPropertiesHelper
+				.buildIRODSAccountFromTestProperties(testingProperties);
+		IRODSHiveService irodsHiveService = new IRODSHiveServiceImpl(
+				irodsFileSystem.getIRODSAccessObjectFactory(), irodsAccount);
+
+		String targetDb = scratchFileUtils
+				.createAndReturnAbsoluteScratchPath(IRODS_TEST_SUBDIR_PATH
+						+ "/" + testCollection);
+
+		String targetIrodsCollection = testingPropertiesHelper
+				.buildIRODSCollectionAbsolutePathFromTestProperties(
+						testingProperties, IRODS_TEST_SUBDIR_PATH);
+
+		IRODSFile vocabFile = irodsFileSystem.getIRODSFileFactory(
+				irodsAccount).instanceIRODSFile(targetIrodsCollection, testFile);
+		vocabFile.createNewFile();
+
+		HiveVocabularyEntry entry = new HiveVocabularyEntry();
+		entry.setComment("comment");
+		entry.setDomainObjectUniqueName(vocabFile.getAbsolutePath());
+		entry.setMetadataDomain(MetadataDomain.DATA);
+		entry.setPreferredLabel(testVocabTerm);
+		entry.setTermURI(testURI);
+		entry.setVocabularyName("agrovoc");
+
+		irodsHiveService.saveOrUpdateVocabularyTerm(entry);
+		JenaHiveConfiguration jenaHiveConfiguration = JargonHiveConfigurationHelper
+				.buildJenaHiveConfigurationFromProperties(testingProperties);
+
+		// sub in a temp database
+		StringBuilder sb = new StringBuilder();
+		sb.append(testingProperties
+				.getProperty(JargonHiveConfigurationHelper.INDEXER_DB_URI_PREFIX));
+		sb.append(targetDb);
+		sb.append("data");
+		sb.append(testingProperties
+				.getProperty(JargonHiveConfigurationHelper.INDEXER_DB_URI_SUFFIX));
+		jenaHiveConfiguration.setJenaDbUri(sb.toString());
+
+		HiveMetadataIndexer hiveMetadataIndexer = new HiveMetadataIndexer();
+		hiveMetadataIndexer.setIndexerAccount(irodsAccount);
+		hiveMetadataIndexer.setIrodsFileSystem(irodsFileSystem);
+		hiveMetadataIndexer.setJenaHiveConfiguration(jenaHiveConfiguration);
+		JenaModelManager jenaModelManager = new JenaModelManager();
+		OntModel ontModel = jenaModelManager
+				.buildJenaDatabaseModel(jenaHiveConfiguration);
+		IrodsJenaModelUpdater modelUpdater = new IrodsJenaModelUpdater(
+				irodsFileSystem.getIRODSAccessObjectFactory(), irodsAccount,
+				ontModel, jenaHiveConfiguration);
+
+		hiveMetadataIndexer.setOntModel(ontModel);
+		hiveMetadataIndexer.setModelUpdater(modelUpdater);
+
+		AvuData avuData = AvuData
+				.instance(
+						"http://a.vocabulary#term",
+						"vocabulary=agrovoc|preferredLabel=testOnMetadataAdd|comment=comment",
+						"iRODSUserTagging:HIVE:VocabularyTerm");
+
+		MetadataEvent metadataEvent = new MetadataEvent();
+		metadataEvent.setActionsEnum(actionsEnum.ADD);
+		metadataEvent.setAvuData(avuData);
+		metadataEvent.setIrodsAbsolutePath(vocabFile.getAbsolutePath());
+		metadataEvent.setObjectType(ObjectType.DATA_OBJECT);
+
+		hiveMetadataIndexer.onMetadataAdd(metadataEvent);
+
+		URI irodsUri = IRODSUriUtils
+				.buildURIForAnAccountWithNoUserInformationIncluded(
+						irodsAccount, vocabFile.getAbsolutePath());
+
+		// read back the resource
+
+		Resource irodsCollResc = ontModel.getResource(irodsUri.toString());
+		Assert.assertNotNull("no resc found in model", irodsCollResc);
+
+		ontModel.write(System.out);
 
 		StmtIterator iter = irodsCollResc.listProperties();
 
@@ -158,11 +254,262 @@ public class HiveMetadataIndexerTest {
 
 		iter = ontModel.listStatements();
 
+		boolean haveData = iter.hasNext();
+		Assert.assertTrue("didnt add data", haveData);
+
+	}
+	
+	@Test
+	public void testOnMetadataAddDataObjectTwoTerms() throws Exception {
+
+		String testCollection = "testOnMetadataAddDataObjectTwoTerms";
+
+		String testFile = "testOnMetadataAddDataObjectTwoTerms.txt";
+		String testVocabTerm = testFile;
+		String testVocabTerm2 = testFile + "2";
+
+		String testURI = "http://a.vocabulary#term";
+		String testURI2 = "http://a.vocabulary#term2";
+		IRODSAccount irodsAccount = testingPropertiesHelper
+				.buildIRODSAccountFromTestProperties(testingProperties);
+		IRODSHiveService irodsHiveService = new IRODSHiveServiceImpl(
+				irodsFileSystem.getIRODSAccessObjectFactory(), irodsAccount);
+
+		String targetDb = scratchFileUtils
+				.createAndReturnAbsoluteScratchPath(IRODS_TEST_SUBDIR_PATH
+						+ "/" + testCollection);
+
+		String targetIrodsCollection = testingPropertiesHelper
+				.buildIRODSCollectionAbsolutePathFromTestProperties(
+						testingProperties, IRODS_TEST_SUBDIR_PATH);
+
+		IRODSFile vocabFile = irodsFileSystem.getIRODSFileFactory(
+				irodsAccount).instanceIRODSFile(targetIrodsCollection, testFile);
+		vocabFile.createNewFile();
+
+		HiveVocabularyEntry entry = new HiveVocabularyEntry();
+		entry.setComment("comment");
+		entry.setDomainObjectUniqueName(vocabFile.getAbsolutePath());
+		entry.setMetadataDomain(MetadataDomain.DATA);
+		entry.setPreferredLabel(testVocabTerm);
+		entry.setTermURI(testURI);
+		entry.setVocabularyName("agrovoc");
+
+		irodsHiveService.saveOrUpdateVocabularyTerm(entry);
+		
+		entry = new HiveVocabularyEntry();
+		entry.setComment("comment");
+		entry.setDomainObjectUniqueName(vocabFile.getAbsolutePath());
+		entry.setMetadataDomain(MetadataDomain.DATA);
+		entry.setPreferredLabel(testVocabTerm2);
+		entry.setTermURI(testURI2);
+		entry.setVocabularyName("agrovoc");
+
+		irodsHiveService.saveOrUpdateVocabularyTerm(entry);
+		
+		JenaHiveConfiguration jenaHiveConfiguration = JargonHiveConfigurationHelper
+				.buildJenaHiveConfigurationFromProperties(testingProperties);
+
+		// sub in a temp database
+		StringBuilder sb = new StringBuilder();
+		sb.append(testingProperties
+				.getProperty(JargonHiveConfigurationHelper.INDEXER_DB_URI_PREFIX));
+		sb.append(targetDb);
+		sb.append("data");
+		sb.append(testingProperties
+				.getProperty(JargonHiveConfigurationHelper.INDEXER_DB_URI_SUFFIX));
+		jenaHiveConfiguration.setJenaDbUri(sb.toString());
+
+		HiveMetadataIndexer hiveMetadataIndexer = new HiveMetadataIndexer();
+		hiveMetadataIndexer.setIndexerAccount(irodsAccount);
+		hiveMetadataIndexer.setIrodsFileSystem(irodsFileSystem);
+		hiveMetadataIndexer.setJenaHiveConfiguration(jenaHiveConfiguration);
+		JenaModelManager jenaModelManager = new JenaModelManager();
+		OntModel ontModel = jenaModelManager
+				.buildJenaDatabaseModel(jenaHiveConfiguration);
+		IrodsJenaModelUpdater modelUpdater = new IrodsJenaModelUpdater(
+				irodsFileSystem.getIRODSAccessObjectFactory(), irodsAccount,
+				ontModel, jenaHiveConfiguration);
+
+		hiveMetadataIndexer.setOntModel(ontModel);
+		hiveMetadataIndexer.setModelUpdater(modelUpdater);
+
+		AvuData avuData = AvuData
+				.instance(
+						"http://a.vocabulary#term",
+						"vocabulary=agrovoc|preferredLabel=testOnMetadataAdd|comment=comment",
+						"iRODSUserTagging:HIVE:VocabularyTerm");
+
+		MetadataEvent metadataEvent = new MetadataEvent();
+		metadataEvent.setActionsEnum(actionsEnum.ADD);
+		metadataEvent.setAvuData(avuData);
+		metadataEvent.setIrodsAbsolutePath(vocabFile.getAbsolutePath());
+		metadataEvent.setObjectType(ObjectType.DATA_OBJECT);
+
+		hiveMetadataIndexer.onMetadataAdd(metadataEvent);
+		
+		avuData = AvuData
+				.instance(
+						"http://a.vocabulary#term2",
+						"vocabulary=agrovoc|preferredLabel=testOnMetadataAdd|comment=comment",
+						"iRODSUserTagging:HIVE:VocabularyTerm");
+
+		 metadataEvent = new MetadataEvent();
+		metadataEvent.setActionsEnum(actionsEnum.ADD);
+		metadataEvent.setAvuData(avuData);
+		metadataEvent.setIrodsAbsolutePath(vocabFile.getAbsolutePath());
+		metadataEvent.setObjectType(ObjectType.DATA_OBJECT);
+
+		hiveMetadataIndexer.onMetadataAdd(metadataEvent);
+
+		URI irodsUri = IRODSUriUtils
+				.buildURIForAnAccountWithNoUserInformationIncluded(
+						irodsAccount, vocabFile.getAbsolutePath());
+
+		// read back the resource
+
+		Resource irodsCollResc = ontModel.getResource(irodsUri.toString());
+		Assert.assertNotNull("no resc found in model", irodsCollResc);
+
+		ontModel.write(System.out);
+
+		StmtIterator iter = irodsCollResc.listProperties();
+
 		while (iter.hasNext()) {
-			System.out
-					.println(">>>>>>>>>>>>>>>>>>>>>>>> whole model iter next:"
-							+ iter.nextStatement());
+			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>> iter next:"
+					+ iter.nextStatement());
 		}
+
+		iter = ontModel.listStatements();
+
+		boolean haveData = iter.hasNext();
+		Assert.assertTrue("didnt add data", haveData);
+
+	}
+	
+	@Test
+	public void testOnMetadataAddDataObjectDuplicateTerms() throws Exception {
+
+		String testCollection = "testOnMetadataAddDataObjectDuplicateTerms";
+
+		String testFile = "testOnMetadataAddDataObjectDuplicateTerms.txt";
+		String testVocabTerm = testFile;
+
+		String testURI = "http://a.vocabulary#term";
+		IRODSAccount irodsAccount = testingPropertiesHelper
+				.buildIRODSAccountFromTestProperties(testingProperties);
+		IRODSHiveService irodsHiveService = new IRODSHiveServiceImpl(
+				irodsFileSystem.getIRODSAccessObjectFactory(), irodsAccount);
+
+		String targetDb = scratchFileUtils
+				.createAndReturnAbsoluteScratchPath(IRODS_TEST_SUBDIR_PATH
+						+ "/" + testCollection);
+
+		String targetIrodsCollection = testingPropertiesHelper
+				.buildIRODSCollectionAbsolutePathFromTestProperties(
+						testingProperties, IRODS_TEST_SUBDIR_PATH);
+
+		IRODSFile vocabFile = irodsFileSystem.getIRODSFileFactory(
+				irodsAccount).instanceIRODSFile(targetIrodsCollection, testFile);
+		vocabFile.createNewFile();
+
+		HiveVocabularyEntry entry = new HiveVocabularyEntry();
+		entry.setComment("comment");
+		entry.setDomainObjectUniqueName(vocabFile.getAbsolutePath());
+		entry.setMetadataDomain(MetadataDomain.DATA);
+		entry.setPreferredLabel(testVocabTerm);
+		entry.setTermURI(testURI);
+		entry.setVocabularyName("agrovoc");
+
+		irodsHiveService.saveOrUpdateVocabularyTerm(entry);
+		
+		entry = new HiveVocabularyEntry();
+		entry.setComment("comment");
+		entry.setDomainObjectUniqueName(vocabFile.getAbsolutePath());
+		entry.setMetadataDomain(MetadataDomain.DATA);
+		entry.setPreferredLabel(testVocabTerm);
+		entry.setTermURI(testURI);
+		entry.setVocabularyName("agrovoc");
+
+		irodsHiveService.saveOrUpdateVocabularyTerm(entry);
+		
+		JenaHiveConfiguration jenaHiveConfiguration = JargonHiveConfigurationHelper
+				.buildJenaHiveConfigurationFromProperties(testingProperties);
+
+		// sub in a temp database
+		StringBuilder sb = new StringBuilder();
+		sb.append(testingProperties
+				.getProperty(JargonHiveConfigurationHelper.INDEXER_DB_URI_PREFIX));
+		sb.append(targetDb);
+		sb.append("data");
+		sb.append(testingProperties
+				.getProperty(JargonHiveConfigurationHelper.INDEXER_DB_URI_SUFFIX));
+		jenaHiveConfiguration.setJenaDbUri(sb.toString());
+
+		HiveMetadataIndexer hiveMetadataIndexer = new HiveMetadataIndexer();
+		hiveMetadataIndexer.setIndexerAccount(irodsAccount);
+		hiveMetadataIndexer.setIrodsFileSystem(irodsFileSystem);
+		hiveMetadataIndexer.setJenaHiveConfiguration(jenaHiveConfiguration);
+		JenaModelManager jenaModelManager = new JenaModelManager();
+		OntModel ontModel = jenaModelManager
+				.buildJenaDatabaseModel(jenaHiveConfiguration);
+		IrodsJenaModelUpdater modelUpdater = new IrodsJenaModelUpdater(
+				irodsFileSystem.getIRODSAccessObjectFactory(), irodsAccount,
+				ontModel, jenaHiveConfiguration);
+
+		hiveMetadataIndexer.setOntModel(ontModel);
+		hiveMetadataIndexer.setModelUpdater(modelUpdater);
+
+		AvuData avuData = AvuData
+				.instance(
+						"http://a.vocabulary#term",
+						"vocabulary=agrovoc|preferredLabel=testOnMetadataAdd|comment=comment",
+						"iRODSUserTagging:HIVE:VocabularyTerm");
+
+		MetadataEvent metadataEvent = new MetadataEvent();
+		metadataEvent.setActionsEnum(actionsEnum.ADD);
+		metadataEvent.setAvuData(avuData);
+		metadataEvent.setIrodsAbsolutePath(vocabFile.getAbsolutePath());
+		metadataEvent.setObjectType(ObjectType.DATA_OBJECT);
+
+		hiveMetadataIndexer.onMetadataAdd(metadataEvent);
+		
+		avuData = AvuData
+				.instance(
+						"http://a.vocabulary#term",
+						"vocabulary=agrovoc|preferredLabel=testOnMetadataAdd|comment=comment",
+						"iRODSUserTagging:HIVE:VocabularyTerm");
+
+		 metadataEvent = new MetadataEvent();
+		metadataEvent.setActionsEnum(actionsEnum.ADD);
+		metadataEvent.setAvuData(avuData);
+		metadataEvent.setIrodsAbsolutePath(vocabFile.getAbsolutePath());
+		metadataEvent.setObjectType(ObjectType.DATA_OBJECT);
+
+		hiveMetadataIndexer.onMetadataAdd(metadataEvent);
+
+		URI irodsUri = IRODSUriUtils
+				.buildURIForAnAccountWithNoUserInformationIncluded(
+						irodsAccount, vocabFile.getAbsolutePath());
+
+		// read back the resource
+
+		Resource irodsCollResc = ontModel.getResource(irodsUri.toString());
+		Assert.assertNotNull("no resc found in model", irodsCollResc);
+
+		ontModel.write(System.out);
+
+		StmtIterator iter = irodsCollResc.listProperties();
+
+		while (iter.hasNext()) {
+			System.out.println(">>>>>>>>>>>>>>>>>>>>>>>> iter next:"
+					+ iter.nextStatement());
+		}
+
+		iter = ontModel.listStatements();
+
+		boolean haveData = iter.hasNext();
+		Assert.assertTrue("didnt add data", haveData);
 
 	}
 
