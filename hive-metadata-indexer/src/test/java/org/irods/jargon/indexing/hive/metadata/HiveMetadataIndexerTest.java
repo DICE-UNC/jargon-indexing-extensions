@@ -165,7 +165,6 @@ public class HiveMetadataIndexerTest {
 
 		String testCollection = "testOnMetadataAddCollection";
 		String testVocabTerm = testCollection;
-		String testVocabTerm2 = testCollection + "2";
 
 		String testURI = "http://a.vocabulary#term";
 		String testURI2 = "http://a.vocabulary#term2";
@@ -283,8 +282,6 @@ public class HiveMetadataIndexerTest {
 		
 		Assert.assertTrue("added uri1", found1);
 		Assert.assertTrue("added uri2", found2);
-
-
 		
 	}
 
