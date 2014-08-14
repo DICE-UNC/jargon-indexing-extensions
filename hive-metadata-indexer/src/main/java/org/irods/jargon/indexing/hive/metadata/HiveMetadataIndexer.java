@@ -10,7 +10,7 @@ import org.irods.jargon.core.exception.JargonException;
 import org.irods.jargon.core.pub.IRODSFileSystem;
 import org.irods.jargon.hive.external.indexer.HiveIndexerException;
 import org.irods.jargon.hive.external.indexer.modelservice.IrodsJenaModelUpdater;
-import org.irods.jargon.hive.external.utils.JargonHiveConfigurationHelper;
+import org.irods.jargon.hive.external.utils.JenaHiveConfigurationHelper;
 import org.irods.jargon.hive.external.utils.JenaHiveConfiguration;
 import org.irods.jargon.hive.external.utils.JenaModelManager;
 import org.irods.jargon.hive.irods.IRODSHiveService;
@@ -53,14 +53,14 @@ public class HiveMetadataIndexer extends IndexerWrapper {
 		log.info("starting up connection to Jena");
 		try {
 			irodsFileSystem = IRODSFileSystem.instance();
-			Properties properties = JargonHiveConfigurationHelper
+			Properties properties = JenaHiveConfigurationHelper
 					.loadProperties("indexer.properties");
 
-			jenaHiveConfiguration = JargonHiveConfigurationHelper
+			jenaHiveConfiguration = JenaHiveConfigurationHelper
 					.buildJenaHiveConfigurationFromProperties(properties);
 			log.info("built jena hive configuration... now establish an indexing account");
 
-			indexerAccount = JargonHiveConfigurationHelper
+			indexerAccount = JenaHiveConfigurationHelper
 					.buildIRODSAccountFromProperties(properties);
 			log.info("have irodsAccount, now initialize jena model service");
 

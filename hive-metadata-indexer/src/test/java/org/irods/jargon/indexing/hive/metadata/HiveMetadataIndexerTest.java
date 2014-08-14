@@ -13,7 +13,7 @@ import org.irods.jargon.core.query.CollectionAndDataObjectListingEntry.ObjectTyp
 import org.irods.jargon.core.query.MetaDataAndDomainData.MetadataDomain;
 import org.irods.jargon.core.utils.IRODSUriUtils;
 import org.irods.jargon.hive.external.indexer.modelservice.IrodsJenaModelUpdater;
-import org.irods.jargon.hive.external.utils.JargonHiveConfigurationHelper;
+import org.irods.jargon.hive.external.utils.JenaHiveConfigurationHelper;
 import org.irods.jargon.hive.external.utils.JenaHiveConfiguration;
 import org.irods.jargon.hive.external.utils.JenaModelManager;
 import org.irods.jargon.hive.irods.HiveVocabularyEntry;
@@ -94,17 +94,17 @@ public class HiveMetadataIndexerTest {
 		entry.setVocabularyName("agrovoc");
 
 		irodsHiveService.saveOrUpdateVocabularyTerm(entry);
-		JenaHiveConfiguration jenaHiveConfiguration = JargonHiveConfigurationHelper
+		JenaHiveConfiguration jenaHiveConfiguration = JenaHiveConfigurationHelper
 				.buildJenaHiveConfigurationFromProperties(testingProperties);
 
 		// sub in a temp database
 		StringBuilder sb = new StringBuilder();
 		sb.append(testingProperties
-				.getProperty(JargonHiveConfigurationHelper.INDEXER_DB_URI_PREFIX));
+				.getProperty(JenaHiveConfigurationHelper.INDEXER_DB_URI_PREFIX));
 		sb.append(targetDb);
 		sb.append("data");
 		sb.append(testingProperties
-				.getProperty(JargonHiveConfigurationHelper.INDEXER_DB_URI_SUFFIX));
+				.getProperty(JenaHiveConfigurationHelper.INDEXER_DB_URI_SUFFIX));
 		jenaHiveConfiguration.setJenaDbUri(sb.toString());
 
 		HiveMetadataIndexer hiveMetadataIndexer = new HiveMetadataIndexer();
@@ -196,17 +196,17 @@ public class HiveMetadataIndexerTest {
 		entry.setVocabularyName("agrovoc");
 
 		irodsHiveService.saveOrUpdateVocabularyTerm(entry);
-		JenaHiveConfiguration jenaHiveConfiguration = JargonHiveConfigurationHelper
+		JenaHiveConfiguration jenaHiveConfiguration = JenaHiveConfigurationHelper
 				.buildJenaHiveConfigurationFromProperties(testingProperties);
 
 		// sub in a temp database
 		StringBuilder sb = new StringBuilder();
 		sb.append(testingProperties
-				.getProperty(JargonHiveConfigurationHelper.INDEXER_DB_URI_PREFIX));
+				.getProperty(JenaHiveConfigurationHelper.INDEXER_DB_URI_PREFIX));
 		sb.append(targetDb);
 		sb.append("data");
 		sb.append(testingProperties
-				.getProperty(JargonHiveConfigurationHelper.INDEXER_DB_URI_SUFFIX));
+				.getProperty(JenaHiveConfigurationHelper.INDEXER_DB_URI_SUFFIX));
 		jenaHiveConfiguration.setJenaDbUri(sb.toString());
 
 		HiveMetadataIndexer hiveMetadataIndexer = new HiveMetadataIndexer();
@@ -319,17 +319,17 @@ public class HiveMetadataIndexerTest {
 		entry.setVocabularyName("agrovoc");
 
 		irodsHiveService.saveOrUpdateVocabularyTerm(entry);
-		JenaHiveConfiguration jenaHiveConfiguration = JargonHiveConfigurationHelper
+		JenaHiveConfiguration jenaHiveConfiguration = JenaHiveConfigurationHelper
 				.buildJenaHiveConfigurationFromProperties(testingProperties);
 
 		// sub in a temp database
 		StringBuilder sb = new StringBuilder();
 		sb.append(testingProperties
-				.getProperty(JargonHiveConfigurationHelper.INDEXER_DB_URI_PREFIX));
+				.getProperty(JenaHiveConfigurationHelper.INDEXER_DB_URI_PREFIX));
 		sb.append(targetDb);
 		sb.append("data");
 		sb.append(testingProperties
-				.getProperty(JargonHiveConfigurationHelper.INDEXER_DB_URI_SUFFIX));
+				.getProperty(JenaHiveConfigurationHelper.INDEXER_DB_URI_SUFFIX));
 		jenaHiveConfiguration.setJenaDbUri(sb.toString());
 
 		HiveMetadataIndexer hiveMetadataIndexer = new HiveMetadataIndexer();
@@ -433,17 +433,17 @@ public class HiveMetadataIndexerTest {
 
 		irodsHiveService.saveOrUpdateVocabularyTerm(entry);
 
-		JenaHiveConfiguration jenaHiveConfiguration = JargonHiveConfigurationHelper
+		JenaHiveConfiguration jenaHiveConfiguration = JenaHiveConfigurationHelper
 				.buildJenaHiveConfigurationFromProperties(testingProperties);
 
 		// sub in a temp database
 		StringBuilder sb = new StringBuilder();
 		sb.append(testingProperties
-				.getProperty(JargonHiveConfigurationHelper.INDEXER_DB_URI_PREFIX));
+				.getProperty(JenaHiveConfigurationHelper.INDEXER_DB_URI_PREFIX));
 		sb.append(targetDb);
 		sb.append("data");
 		sb.append(testingProperties
-				.getProperty(JargonHiveConfigurationHelper.INDEXER_DB_URI_SUFFIX));
+				.getProperty(JenaHiveConfigurationHelper.INDEXER_DB_URI_SUFFIX));
 		jenaHiveConfiguration.setJenaDbUri(sb.toString());
 
 		HiveMetadataIndexer hiveMetadataIndexer = new HiveMetadataIndexer();
@@ -559,17 +559,17 @@ public class HiveMetadataIndexerTest {
 
 		irodsHiveService.saveOrUpdateVocabularyTerm(entry);
 
-		JenaHiveConfiguration jenaHiveConfiguration = JargonHiveConfigurationHelper
+		JenaHiveConfiguration jenaHiveConfiguration = JenaHiveConfigurationHelper
 				.buildJenaHiveConfigurationFromProperties(testingProperties);
 
 		// sub in a temp database
 		StringBuilder sb = new StringBuilder();
 		sb.append(testingProperties
-				.getProperty(JargonHiveConfigurationHelper.INDEXER_DB_URI_PREFIX));
+				.getProperty(JenaHiveConfigurationHelper.INDEXER_DB_URI_PREFIX));
 		sb.append(targetDb);
 		sb.append("data");
 		sb.append(testingProperties
-				.getProperty(JargonHiveConfigurationHelper.INDEXER_DB_URI_SUFFIX));
+				.getProperty(JenaHiveConfigurationHelper.INDEXER_DB_URI_SUFFIX));
 		jenaHiveConfiguration.setJenaDbUri(sb.toString());
 
 		HiveMetadataIndexer hiveMetadataIndexer = new HiveMetadataIndexer();
