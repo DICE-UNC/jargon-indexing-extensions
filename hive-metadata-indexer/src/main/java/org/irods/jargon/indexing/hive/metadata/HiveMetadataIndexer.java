@@ -10,8 +10,8 @@ import org.irods.jargon.core.exception.JargonException;
 import org.irods.jargon.core.pub.IRODSFileSystem;
 import org.irods.jargon.hive.external.indexer.HiveIndexerException;
 import org.irods.jargon.hive.external.indexer.modelservice.IrodsJenaModelUpdater;
-import org.irods.jargon.hive.external.utils.JenaHiveConfigurationHelper;
 import org.irods.jargon.hive.external.utils.JenaHiveConfiguration;
+import org.irods.jargon.hive.external.utils.JenaHiveConfigurationHelper;
 import org.irods.jargon.hive.external.utils.JenaModelManager;
 import org.irods.jargon.hive.irods.IRODSHiveService;
 import org.irods.jargon.indexing.wrapper.GeneralIndexerRuntimeException;
@@ -51,7 +51,7 @@ public class HiveMetadataIndexer extends IndexerWrapper {
 		log.info("HIVE indexer build time:{}", HiveIndexerVersion.BUILD_TIME);
 
 		log.info("starting up connection to Jena");
-		try {
+		try { 
 			irodsFileSystem = IRODSFileSystem.instance();
 			Properties properties = JenaHiveConfigurationHelper
 					.loadProperties("indexer.properties");
