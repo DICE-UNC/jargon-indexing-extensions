@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package org.irods.jargon.indexing.hive.metadata.utils;
 
@@ -16,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.rdf.model.Model;
 
 /**
  * Convenience service that can initialize a HIVE based triple store for use by
@@ -28,14 +27,13 @@ import com.hp.hpl.jena.rdf.model.Model;
  * This convenience class wraps some of the services of the
  * jargon-hive-3store-integration library, see
  * https://github.com/DICE-UNC/irods-hive
- * 
+ *
  * @author Mike Conway - DICE
- * 
+ *
  */
 
-// FIXME: how can I do a memory only model?
-
-public class HiveMetadataIndexerInitializerImpl implements HiveMetadataIndexerInitializer {
+public class HiveMetadataIndexerInitializerImpl implements
+		HiveMetadataIndexerInitializer {
 
 	private final JenaHiveConfiguration jenaHiveConfiguration;
 	public static final Logger log = LoggerFactory
@@ -49,12 +47,11 @@ public class HiveMetadataIndexerInitializerImpl implements HiveMetadataIndexerIn
 		}
 
 		this.jenaHiveConfiguration = jenaHiveConfiguration;
-
 	}
-   
+
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.irods.jargon.indexing.hive.metadata.utils.HiveMetadataIndexer#
 	 * initializeAndBatchIndexOntologyModel
 	 * (org.irods.jargon.core.pub.IRODSAccessObjectFactory,
@@ -85,11 +82,11 @@ public class HiveMetadataIndexerInitializerImpl implements HiveMetadataIndexerIn
 			throw new HiveIndexerException("error in batch indexing process", e);
 		}
 
-	} 
+	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.irods.jargon.indexing.hive.metadata.utils.HiveMetadataIndexer#
 	 * initializeBareOntologyModel()
 	 */
