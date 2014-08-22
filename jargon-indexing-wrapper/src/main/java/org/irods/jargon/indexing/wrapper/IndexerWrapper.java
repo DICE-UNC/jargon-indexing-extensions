@@ -100,11 +100,15 @@ public class IndexerWrapper implements Indexer {
 
 	private void processUnionOperation(Message message, Messages ofMessages) {
 		log.info("processUnionOperation()");
+		log.info("message:{}", message);
 
 		// look at message part for a part that is the metadata
 
 		for (DataEntity part : message.getHasPart()) {
-			if (!part.getMetadata().isEmpty()) {
+			if (part.getMetadata() == null || part.getMetadata().isEmpty()) {
+				log.info("no metadata present");
+			} else {
+				log.info("part being processed:{}", part);
 
 				for (AVU avu : part.getMetadata()) {
 
