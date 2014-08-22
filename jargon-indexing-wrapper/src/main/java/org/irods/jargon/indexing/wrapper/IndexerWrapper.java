@@ -1,7 +1,7 @@
 package org.irods.jargon.indexing.wrapper;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.irods.jargon.core.exception.JargonException;
 import org.irods.jargon.core.pub.domain.AvuData;
@@ -131,25 +131,40 @@ public class IndexerWrapper implements Indexer {
 
 			log.info("have metadata object:{}", part.getAdditionalProperties()
 					.get(METADATA_OBJECT));
-			List avuDataEntry = (ArrayList) part.getAdditionalProperties().get(
-					METADATA_OBJECT);
+			List<Map<String, String>> avuEntries = (List<Map<String, String>>) part
+					.getAdditionalProperties().get(METADATA_OBJECT);
 
-			if (avuDataEntry.size() != 3) {
-				log.warn("expected 3 elements in avu data...discarded");
-				continue;
-			}
+			log.info("avuEntries:{}", avuEntries);
+			log.info("with size:{}", avuEntries.size());
 
-			String attribute = (String) avuDataEntry.get(2);
-			String value = (String) avuDataEntry.get(1);
-			String unit = (String) avuDataEntry.get(0);
+			Map<String, String> entry = avuEntries.get(0);
+
+			/*
+			 * if (avuDataEntry.size() != 3) {
+			 * log.warn("expected 3 elements in avu data...discarded");
+			 * continue; }
+			 * 
+			 * String attribute = (String) avuDataEntry.get(2); String value =
+			 * (String) avuDataEntry.get(1); String unit = (String)
+			 * avuDataEntry.get(0);
+			 */
+
+			String attribute = entry.get("attribute");
+			String value = entry.get("value");
+			String unit = entry.get("unit");
 
 			log.info("process as AVU add event{}", part);
 			MetadataEvent addMetadataEvent = new MetadataEvent();
 			addMetadataEvent.setActionsEnum(actionsEnum.ADD);
 			addMetadataEvent.setIrodsAbsolutePath(part.getDescription());
 			try {
-				AvuData avuData = AvuData.instance(attribute.substring(10),
-						value.substring(6), unit.substring(5));
+				AvuData avuData = AvuData.instance(attribute, value, unit);
+
+				/*
+				 * AvuData avuData = AvuData.instance(attribute.substring(10),
+				 * value.substring(6), unit.substring(5));
+				 */
+
 				addMetadataEvent.setAvuData(avuData);
 				this.onMetadataAdd(addMetadataEvent);
 			} catch (JargonException e) {
