@@ -26,6 +26,7 @@ import databook.persistence.rule.rdf.ruleset.Messages;
  */
 public class IndexerWrapper implements Indexer {
 
+	public static final String METADATA_OBJECT = "metadataObject";
 	private IndexingService indexingService;
 	private Scheduler scheduler;
 
@@ -105,30 +106,45 @@ public class IndexerWrapper implements Indexer {
 		// look at message part for a part that is the metadata
 
 		for (DataEntity part : message.getHasPart()) {
-			if (part.getMetadata() == null || part.getMetadata().isEmpty()) {
-				log.info("no metadata present");
+
+			/*
+			 * Look for AVU create event
+			 */
+
+			if (part.getAdditionalProperties() == null
+					|| part.getAdditionalProperties().isEmpty()) {
+				log.info("no additional properties");
+				continue;
+			}
+
+			log.info("inspecting additional properties for avu create");
+
+			if (part.getAdditionalProperties().get(METADATA_OBJECT) != null) {
+				log.info("have a metadataObject property for this part, process as a metadata create");
 			} else {
-				log.info("part being processed:{}", part);
+				log.info("no metadata");
+				continue;
+			}
 
-				for (AVU avu : part.getMetadata()) {
+			log.info("have metadata object:{}", part.getAdditionalProperties()
+					.get(METADATA_OBJECT));
+			AVU avu = (AVU) part.getAdditionalProperties().get(METADATA_OBJECT);
 
-					log.info("process as AVU add event{}", part);
-					MetadataEvent addMetadataEvent = new MetadataEvent();
-					addMetadataEvent.setActionsEnum(actionsEnum.ADD);
-					addMetadataEvent
-							.setIrodsAbsolutePath(part.getDescription());
-					try {
-						AvuData avuData = AvuData.instance(avu.getAttribute(),
-								avu.getValue(), avu.getUnit());
-						addMetadataEvent.setAvuData(avuData);
-						this.onMetadataAdd(addMetadataEvent);
-					} catch (JargonException e) {
-						log.error("error", e);
-						throw new GeneralIndexerRuntimeException(
-								"jargon exception occurred processing AVU", e);
-					}
-				}
+			log.info("as AVU:{}", avu);
 
+			log.info("process as AVU add event{}", part);
+			MetadataEvent addMetadataEvent = new MetadataEvent();
+			addMetadataEvent.setActionsEnum(actionsEnum.ADD);
+			addMetadataEvent.setIrodsAbsolutePath(part.getDescription());
+			try {
+				AvuData avuData = AvuData.instance(avu.getAttribute(),
+						avu.getValue(), avu.getUnit());
+				addMetadataEvent.setAvuData(avuData);
+				this.onMetadataAdd(addMetadataEvent);
+			} catch (JargonException e) {
+				log.error("error", e);
+				throw new GeneralIndexerRuntimeException(
+						"jargon exception occurred processing AVU", e);
 			}
 		}
 
