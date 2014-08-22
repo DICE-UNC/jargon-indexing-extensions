@@ -115,6 +115,13 @@ public class IndexerWrapper implements Indexer {
 			if (part.getUri() != null) {
 				absolutePath = part.getUri().toString();
 				log.info("established uri as:{}", absolutePath);
+				log.info("lop off after the @ sign because I don't know why yet");
+				int idxAmp = absolutePath.lastIndexOf('@');
+				if (idxAmp != -1) {
+					absolutePath = absolutePath.substring(0, idxAmp);
+					log.info("derived abs path from uri:{}", absolutePath);
+				}
+
 			}
 
 			/*
