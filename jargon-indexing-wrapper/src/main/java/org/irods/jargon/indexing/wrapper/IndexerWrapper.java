@@ -107,7 +107,7 @@ public class IndexerWrapper implements Indexer {
 		log.info("message:{}", message);
 
 		// look at message part for a part that is the metadata
-
+		String absolutePath = null;
 		for (DataEntity part : message.getHasPart()) {
 
 			/*
@@ -118,6 +118,10 @@ public class IndexerWrapper implements Indexer {
 					|| part.getAdditionalProperties().isEmpty()) {
 				log.info("no additional properties");
 				continue;
+			}
+			if (part.getUri() != null) {
+				absolutePath = part.getUri().toString();
+				log.info("established uri as:{}", absolutePath);
 			}
 
 			log.info("inspecting additional properties for avu create");
@@ -156,7 +160,7 @@ public class IndexerWrapper implements Indexer {
 			log.info("process as AVU add event{}", part);
 			MetadataEvent addMetadataEvent = new MetadataEvent();
 			addMetadataEvent.setActionsEnum(actionsEnum.ADD);
-			addMetadataEvent.setIrodsAbsolutePath(part.getUri().toString());
+			addMetadataEvent.setIrodsAbsolutePath(absolutePath);
 			try {
 				AvuData avuData = AvuData.instance(attribute, value, unit);
 
