@@ -112,6 +112,11 @@ public class IndexerWrapper implements Indexer {
 
 			log.info("part:{}", part);
 
+			if (part.getUri() != null) {
+				absolutePath = part.getUri().toString();
+				log.info("established uri as:{}", absolutePath);
+			}
+
 			/*
 			 * Look for AVU create event
 			 */
@@ -120,10 +125,6 @@ public class IndexerWrapper implements Indexer {
 					|| part.getAdditionalProperties().isEmpty()) {
 				log.info("no additional properties");
 				continue;
-			}
-			if (part.getUri() != null) {
-				absolutePath = part.getUri().toString();
-				log.info("established uri as:{}", absolutePath);
 			}
 
 			log.info("inspecting additional properties for avu create");
