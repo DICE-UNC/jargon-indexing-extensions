@@ -1,5 +1,8 @@
 package org.irods.jargon.indexing.wrapper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.irods.jargon.core.exception.JargonException;
 import org.irods.jargon.core.pub.domain.AvuData;
 import org.irods.jargon.indexing.wrapper.IndexingConstants.actionsEnum;
@@ -128,17 +131,25 @@ public class IndexerWrapper implements Indexer {
 
 			log.info("have metadata object:{}", part.getAdditionalProperties()
 					.get(METADATA_OBJECT));
-			AVU avu = (AVU) part.getAdditionalProperties().get(METADATA_OBJECT);
+			List avuDataEntry = (ArrayList) part.getAdditionalProperties().get(
+					METADATA_OBJECT);
 
-			log.info("as AVU:{}", avu);
+			if (avuDataEntry.size() != 3) {
+				log.warn("expected 3 elements in avu data...discarded");
+				continue;
+			}
+
+			String attribute = (String) avuDataEntry.get(2);
+			String value = (String) avuDataEntry.get(1);
+			String unit = (String) avuDataEntry.get(0);
 
 			log.info("process as AVU add event{}", part);
 			MetadataEvent addMetadataEvent = new MetadataEvent();
 			addMetadataEvent.setActionsEnum(actionsEnum.ADD);
 			addMetadataEvent.setIrodsAbsolutePath(part.getDescription());
 			try {
-				AvuData avuData = AvuData.instance(avu.getAttribute(),
-						avu.getValue(), avu.getUnit());
+				AvuData avuData = AvuData.instance(attribute.substring(10),
+						value.substring(6), unit.substring(5));
 				addMetadataEvent.setAvuData(avuData);
 				this.onMetadataAdd(addMetadataEvent);
 			} catch (JargonException e) {
