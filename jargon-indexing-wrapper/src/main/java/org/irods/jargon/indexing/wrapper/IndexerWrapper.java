@@ -110,6 +110,8 @@ public class IndexerWrapper implements Indexer {
 		String absolutePath = null;
 		for (DataEntity part : message.getHasPart()) {
 
+			log.info("part:{}", part);
+
 			/*
 			 * Look for AVU create event
 			 */
@@ -135,6 +137,7 @@ public class IndexerWrapper implements Indexer {
 
 			log.info("have metadata object:{}", part.getAdditionalProperties()
 					.get(METADATA_OBJECT));
+			@SuppressWarnings("unchecked")
 			List<Map<String, String>> avuEntries = (List<Map<String, String>>) part
 					.getAdditionalProperties().get(METADATA_OBJECT);
 
@@ -142,16 +145,6 @@ public class IndexerWrapper implements Indexer {
 			log.info("with size:{}", avuEntries.size());
 
 			Map<String, String> entry = avuEntries.get(0);
-
-			/*
-			 * if (avuDataEntry.size() != 3) {
-			 * log.warn("expected 3 elements in avu data...discarded");
-			 * continue; }
-			 * 
-			 * String attribute = (String) avuDataEntry.get(2); String value =
-			 * (String) avuDataEntry.get(1); String unit = (String)
-			 * avuDataEntry.get(0);
-			 */
 
 			String attribute = entry.get("attribute");
 			String value = entry.get("value");
@@ -163,12 +156,6 @@ public class IndexerWrapper implements Indexer {
 			addMetadataEvent.setIrodsAbsolutePath(absolutePath);
 			try {
 				AvuData avuData = AvuData.instance(attribute, value, unit);
-
-				/*
-				 * AvuData avuData = AvuData.instance(attribute.substring(10),
-				 * value.substring(6), unit.substring(5));
-				 */
-
 				addMetadataEvent.setAvuData(avuData);
 				this.onMetadataAdd(addMetadataEvent);
 			} catch (JargonException e) {
