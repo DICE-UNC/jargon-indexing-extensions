@@ -51,7 +51,7 @@ public class HiveMetadataIndexer extends IndexerWrapper {
 		log.info("HIVE indexer build time:{}", HiveIndexerVersion.BUILD_TIME);
 
 		log.info("starting up connection to Jena");
-		try { 
+		try {
 			irodsFileSystem = IRODSFileSystem.instance();
 			Properties properties = JenaHiveConfigurationHelper
 					.loadProperties("indexer.properties");
@@ -62,7 +62,8 @@ public class HiveMetadataIndexer extends IndexerWrapper {
 
 			indexerAccount = JenaHiveConfigurationHelper
 					.buildIRODSAccountFromProperties(properties);
-			log.info("have irodsAccount, now initialize jena model service");
+			log.info("have irodsAccount, now initialize jena model service:{}",
+					indexerAccount);
 
 			JenaModelManager jenaModelManager = new JenaModelManager();
 			ontModel = jenaModelManager
@@ -71,6 +72,7 @@ public class HiveMetadataIndexer extends IndexerWrapper {
 			modelUpdater = new IrodsJenaModelUpdater(
 					irodsFileSystem.getIRODSAccessObjectFactory(),
 					indexerAccount, ontModel, jenaHiveConfiguration);
+			log.info("model updater ready:{}", modelUpdater);
 
 		} catch (HiveIndexerException e) {
 			log.error("error loading startup properties", e);
