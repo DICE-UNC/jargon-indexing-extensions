@@ -156,7 +156,7 @@ public class IndexerWrapper implements Indexer {
 			log.info("process as AVU add event{}", part);
 			MetadataEvent addMetadataEvent = new MetadataEvent();
 			addMetadataEvent.setActionsEnum(actionsEnum.ADD);
-			addMetadataEvent.setIrodsAbsolutePath(part.getDescription());
+			addMetadataEvent.setIrodsAbsolutePath(part.getUri());
 			try {
 				AvuData avuData = AvuData.instance(attribute, value, unit);
 
