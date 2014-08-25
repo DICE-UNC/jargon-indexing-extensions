@@ -128,51 +128,73 @@ public class IndexerWrapper implements Indexer {
 			 * Look for AVU create event
 			 */
 
-			if (part.getAdditionalProperties() == null
-					|| part.getAdditionalProperties().isEmpty()) {
-				log.info("no additional properties");
+			List<Map<String, String>> avuEntries = checkAndExtractMetadataEntriesFromPart(part);
+
+			if (avuEntries == null) {
 				continue;
 			}
 
-			log.info("inspecting additional properties for avu create");
+			for (Map<String, String> entry : avuEntries) {
+				String attribute = entry.get("attribute");
+				String value = entry.get("value");
+				String unit = entry.get("unit");
 
-			if (part.getAdditionalProperties().get(METADATA_OBJECT) != null) {
-				log.info("have a metadataObject property for this part, process as a metadata create");
-			} else {
-				log.info("no metadata");
-				continue;
+				log.info("process as AVU add event{}", part);
+				MetadataEvent addMetadataEvent = new MetadataEvent();
+				addMetadataEvent.setActionsEnum(actionsEnum.ADD);
+				addMetadataEvent.setIrodsAbsolutePath(absolutePath);
+				try {
+					AvuData avuData = AvuData.instance(attribute, value, unit);
+					addMetadataEvent.setAvuData(avuData);
+					this.onMetadataAdd(addMetadataEvent);
+				} catch (JargonException e) {
+					log.error("error", e);
+					throw new GeneralIndexerRuntimeException(
+							"jargon exception occurred processing AVU", e);
+				}
 			}
 
-			log.info("have metadata object:{}", part.getAdditionalProperties()
-					.get(METADATA_OBJECT));
-			@SuppressWarnings("unchecked")
-			List<Map<String, String>> avuEntries = (List<Map<String, String>>) part
-					.getAdditionalProperties().get(METADATA_OBJECT);
-
-			log.info("avuEntries:{}", avuEntries);
-			log.info("with size:{}", avuEntries.size());
-
-			Map<String, String> entry = avuEntries.get(0);
-
-			String attribute = entry.get("attribute");
-			String value = entry.get("value");
-			String unit = entry.get("unit");
-
-			log.info("process as AVU add event{}", part);
-			MetadataEvent addMetadataEvent = new MetadataEvent();
-			addMetadataEvent.setActionsEnum(actionsEnum.ADD);
-			addMetadataEvent.setIrodsAbsolutePath(absolutePath);
-			try {
-				AvuData avuData = AvuData.instance(attribute, value, unit);
-				addMetadataEvent.setAvuData(avuData);
-				this.onMetadataAdd(addMetadataEvent);
-			} catch (JargonException e) {
-				log.error("error", e);
-				throw new GeneralIndexerRuntimeException(
-						"jargon exception occurred processing AVU", e);
-			}
 		}
 
+	}
+
+	/**
+	 * Given a DataEntity, return any AVU entries that might be available. Will
+	 * return <code>null</code> if no entries are found.
+	 * 
+	 * @param part
+	 * @return
+	 */
+	private List<Map<String, String>> checkAndExtractMetadataEntriesFromPart(
+			final DataEntity part) {
+
+		if (part.getAdditionalProperties() == null
+				|| part.getAdditionalProperties().isEmpty()) {
+			log.info("no additional properties");
+			return null;
+		}
+
+		if (part.getAdditionalProperties().get(METADATA_OBJECT) != null) {
+			log.info("have a metadataObject property for this part, process as a metadata create");
+		} else {
+			log.info("no metadata");
+			return null;
+		}
+
+		log.info("have metadata object:{}",
+				part.getAdditionalProperties().get(METADATA_OBJECT));
+		@SuppressWarnings("unchecked")
+		List<Map<String, String>> avuEntries = (List<Map<String, String>>) part
+				.getAdditionalProperties().get(METADATA_OBJECT);
+
+		if (avuEntries.isEmpty()) {
+			log.info("no entries found, so return null");
+			return null;
+		}
+
+		log.info("avuEntries:{}", avuEntries);
+		log.info("with size:{}", avuEntries.size());
+		return avuEntries;
 	}
 
 	private void processDiffOperation(Message message, Messages ofMessages) {
