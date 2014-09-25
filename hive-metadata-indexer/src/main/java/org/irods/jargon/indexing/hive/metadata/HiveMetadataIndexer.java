@@ -31,7 +31,7 @@ import com.hp.hpl.jena.ontology.OntModel;
 public class HiveMetadataIndexer extends IndexerWrapper {
 
 	public static final Logger log = LoggerFactory
-			.getLogger(IndexerWrapper.class);
+			.getLogger(HiveMetadataIndexer.class);
 
 	private JenaHiveConfiguration jenaHiveConfiguration;
 	private IRODSAccount indexerAccount;
