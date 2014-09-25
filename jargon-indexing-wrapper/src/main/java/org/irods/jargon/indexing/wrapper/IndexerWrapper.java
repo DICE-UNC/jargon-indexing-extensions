@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.irods.jargon.core.exception.JargonException;
 import org.irods.jargon.core.pub.domain.AvuData;
+import org.irods.jargon.core.query.CollectionAndDataObjectListingEntry.ObjectType;
 import org.irods.jargon.indexing.wrapper.IndexingConstants.actionsEnum;
 import org.irods.jargon.indexing.wrapper.event.FileEvent;
 import org.irods.jargon.indexing.wrapper.event.MetadataEvent;
@@ -24,9 +25,9 @@ import databook.persistence.rule.rdf.ruleset.Messages;
  * ability to register listeners for these event hooks. This masks some of the
  * complexity of indexing and provides a simple and testable POJO interaction
  * style.
- *
+ * 
  * @author Mike Conway - DICE
- *
+ * 
  */
 public class IndexerWrapper implements Indexer {
 
@@ -74,7 +75,7 @@ public class IndexerWrapper implements Indexer {
 	 * Framework method that will be called on the receipt of each message. This
 	 * will in turn call the appropriate event handler with the correctly parsed
 	 * message
-	 *
+	 * 
 	 * @param message
 	 *            {@link Message} in a potential group of messages receieved
 	 * @param ofMessages
@@ -97,8 +98,47 @@ public class IndexerWrapper implements Indexer {
 				IndexingConstants.OPERATION_DIFF)) {
 			log.info("process as a diff");
 			processDiffOperation(message, ofMessages);
+		} else if (message.getOperation().equals(
+				IndexingConstants.OPERATION_CREATE)) {
+			log.info("process as a create");
+			processCreateOperation(message, ofMessages);
 		} else {
 			log.info("message discarded as no relevant events are included");
+		}
+
+	}
+
+	private void processCreateOperation(Message message, Messages ofMessages) {
+		log.info("processCreateOperation()");
+		log.info("message:{}", message);
+
+		// look at message part for a part that is the metadata
+		String absolutePath = null;
+		for (DataEntity part : message.getHasPart()) {
+
+			log.info("part:{}", part);
+
+			if (part.getLabel() != null) {
+				absolutePath = part.getLabel();
+				log.info("established absolutePath as:{}", absolutePath);
+			}
+
+			if (part.getType() != null
+					&& part.getType()
+							.equals(IndexingConstants.TYPE_DATA_OBJECT)) {
+				log.info(
+						"have type of data object, process as file create event:{}",
+						part.getType());
+
+				FileEvent fileEvent = new FileEvent();
+				fileEvent.setIrodsAbsolutePath(absolutePath);
+				fileEvent.setObjectType(ObjectType.DATA_OBJECT);
+				fileEvent.setActionsEnum(actionsEnum.ADD);
+				log.info("calling onFileAdd with:{}", fileEvent);
+				// TODO: data size not yet provisioned
+				this.onFileAdd(fileEvent);
+			}
+
 		}
 
 	}
@@ -163,7 +203,7 @@ public class IndexerWrapper implements Indexer {
 	/**
 	 * Given a DataEntity, return any AVU entries that might be available. Will
 	 * return <code>null</code> if no entries are found.
-	 *
+	 * 
 	 * @param part
 	 * @return
 	 */
@@ -187,7 +227,7 @@ public class IndexerWrapper implements Indexer {
 				part.getAdditionalProperties().get(METADATA_OBJECT));
 		@SuppressWarnings("unchecked")
 		List<Map<String, String>> avuEntries = (List<Map<String, String>>) part
-		.getAdditionalProperties().get(METADATA_OBJECT);
+				.getAdditionalProperties().get(METADATA_OBJECT);
 
 		if (avuEntries.isEmpty()) {
 			log.info("no entries found, so return null");
@@ -268,7 +308,7 @@ public class IndexerWrapper implements Indexer {
 	/**
 	 * Extension point notified when an individual AVU has been added for a data
 	 * object or collection
-	 *
+	 * 
 	 * @param addMetadataEvent
 	 *            {@link MetadataEvent} that has been encountered
 	 */
@@ -279,7 +319,7 @@ public class IndexerWrapper implements Indexer {
 	/**
 	 * Extension point notified when an individual AVU has been deleted from a
 	 * data object or collection
-	 *
+	 * 
 	 * @param addMetadataDelete
 	 *            {@link MetadataEvent} that has been encountered
 	 */
@@ -289,7 +329,9 @@ public class IndexerWrapper implements Indexer {
 
 	/**
 	 * Extension point when a file is added
-	 * @param fileEvent {@link FileEvent} with information about the file add
+	 * 
+	 * @param fileEvent
+	 *            {@link FileEvent} with information about the file add
 	 */
 	protected void onFileAdd(final FileEvent fileEvent) {
 
@@ -297,7 +339,9 @@ public class IndexerWrapper implements Indexer {
 
 	/**
 	 * Extension point when a file is removed
-	 *  @param fileEvent {@link FileEvent} with information about the file delete
+	 * 
+	 * @param fileEvent
+	 *            {@link FileEvent} with information about the file delete
 	 */
 	protected void onFileDelete(final FileEvent fileEvent) {
 
