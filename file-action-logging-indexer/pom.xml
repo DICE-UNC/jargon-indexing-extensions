@@ -11,6 +11,7 @@
 	<groupId>org.irods.jargon</groupId>
 	<artifactId>file-action-logging-indexer</artifactId>
 	<name>file-action-logging-indexer</name>
+	<packaging>bundle</packaging>
 	<dependencies>
 		<dependency>
 			<groupId>org.irods.jargon</groupId>
