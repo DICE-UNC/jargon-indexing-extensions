@@ -6,6 +6,7 @@ import java.util.Map;
 import org.irods.jargon.core.exception.JargonException;
 import org.irods.jargon.core.pub.domain.AvuData;
 import org.irods.jargon.indexing.wrapper.IndexingConstants.actionsEnum;
+import org.irods.jargon.indexing.wrapper.event.FileEvent;
 import org.irods.jargon.indexing.wrapper.event.MetadataEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,9 +24,9 @@ import databook.persistence.rule.rdf.ruleset.Messages;
  * ability to register listeners for these event hooks. This masks some of the
  * complexity of indexing and provides a simple and testable POJO interaction
  * style.
- * 
+ *
  * @author Mike Conway - DICE
- * 
+ *
  */
 public class IndexerWrapper implements Indexer {
 
@@ -36,8 +37,8 @@ public class IndexerWrapper implements Indexer {
 	public static final Logger log = LoggerFactory
 			.getLogger(IndexerWrapper.class);
 
-	public void setIndexingService(IndexingService is) {
-		this.indexingService = is;
+	public void setIndexingService(final IndexingService is) {
+		indexingService = is;
 	}
 
 	public void startup() {
@@ -73,7 +74,7 @@ public class IndexerWrapper implements Indexer {
 	 * Framework method that will be called on the receipt of each message. This
 	 * will in turn call the appropriate event handler with the correctly parsed
 	 * message
-	 * 
+	 *
 	 * @param message
 	 *            {@link Message} in a potential group of messages receieved
 	 * @param ofMessages
@@ -102,7 +103,8 @@ public class IndexerWrapper implements Indexer {
 
 	}
 
-	private void processUnionOperation(Message message, Messages ofMessages) {
+	private void processUnionOperation(final Message message,
+			final Messages ofMessages) {
 		log.info("processUnionOperation()");
 		log.info("message:{}", message);
 
@@ -146,7 +148,7 @@ public class IndexerWrapper implements Indexer {
 				try {
 					AvuData avuData = AvuData.instance(attribute, value, unit);
 					addMetadataEvent.setAvuData(avuData);
-					this.onMetadataAdd(addMetadataEvent);
+					onMetadataAdd(addMetadataEvent);
 				} catch (JargonException e) {
 					log.error("error", e);
 					throw new GeneralIndexerRuntimeException(
@@ -161,7 +163,7 @@ public class IndexerWrapper implements Indexer {
 	/**
 	 * Given a DataEntity, return any AVU entries that might be available. Will
 	 * return <code>null</code> if no entries are found.
-	 * 
+	 *
 	 * @param part
 	 * @return
 	 */
@@ -185,7 +187,7 @@ public class IndexerWrapper implements Indexer {
 				part.getAdditionalProperties().get(METADATA_OBJECT));
 		@SuppressWarnings("unchecked")
 		List<Map<String, String>> avuEntries = (List<Map<String, String>>) part
-				.getAdditionalProperties().get(METADATA_OBJECT);
+		.getAdditionalProperties().get(METADATA_OBJECT);
 
 		if (avuEntries.isEmpty()) {
 			log.info("no entries found, so return null");
@@ -197,7 +199,8 @@ public class IndexerWrapper implements Indexer {
 		return avuEntries;
 	}
 
-	private void processDiffOperation(Message message, Messages ofMessages) {
+	private void processDiffOperation(final Message message,
+			final Messages ofMessages) {
 		log.info("processDiffOperation()");
 
 		// look at message part for a part that is the metadata
@@ -216,7 +219,7 @@ public class IndexerWrapper implements Indexer {
 						AvuData avuData = AvuData.instance(avu.getAttribute(),
 								avu.getValue(), avu.getUnit());
 						deleteMetadataEvent.setAvuData(avuData);
-						this.onMetadataDelete(deleteMetadataEvent);
+						onMetadataDelete(deleteMetadataEvent);
 					} catch (JargonException e) {
 						log.error("error", e);
 						throw new GeneralIndexerRuntimeException(
@@ -230,8 +233,8 @@ public class IndexerWrapper implements Indexer {
 	}
 
 	@Override
-	public void setScheduler(Scheduler s) {
-		this.scheduler = s;
+	public void setScheduler(final Scheduler s) {
+		scheduler = s;
 	}
 
 	/**
@@ -265,7 +268,7 @@ public class IndexerWrapper implements Indexer {
 	/**
 	 * Extension point notified when an individual AVU has been added for a data
 	 * object or collection
-	 * 
+	 *
 	 * @param addMetadataEvent
 	 *            {@link MetadataEvent} that has been encountered
 	 */
@@ -276,11 +279,27 @@ public class IndexerWrapper implements Indexer {
 	/**
 	 * Extension point notified when an individual AVU has been deleted from a
 	 * data object or collection
-	 * 
+	 *
 	 * @param addMetadataDelete
 	 *            {@link MetadataEvent} that has been encountered
 	 */
 	protected void onMetadataDelete(final MetadataEvent deleteMetadataEvent) {
+
+	}
+
+	/**
+	 * Extension point when a file is added
+	 * @param fileEvent {@link FileEvent} with information about the file add
+	 */
+	protected void onFileAdd(final FileEvent fileEvent) {
+
+	}
+
+	/**
+	 * Extension point when a file is removed
+	 *  @param fileEvent {@link FileEvent} with information about the file delete
+	 */
+	protected void onFileDelete(final FileEvent fileEvent) {
 
 	}
 
