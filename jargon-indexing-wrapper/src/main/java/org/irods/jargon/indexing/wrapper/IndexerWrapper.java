@@ -19,6 +19,7 @@ import databook.persistence.rule.rdf.ruleset.AVU;
 import databook.persistence.rule.rdf.ruleset.DataEntity;
 import databook.persistence.rule.rdf.ruleset.Message;
 import databook.persistence.rule.rdf.ruleset.Messages;
+import databook.persistence.rule.rdf.ruleset.DataObject;
 
 /**
  * Wrapper around indexing service that provides discrete event hooks and the
@@ -117,7 +118,7 @@ public class IndexerWrapper implements Indexer {
 		for (DataEntity part : message.getHasPart()) {
 
 			log.info("part:{}", part);
-
+if (part instanceof DataObject) {
 			if (part.getLabel() != null) {
 				absolutePath = part.getLabel();
 				log.info("established absolutePath as:{}", absolutePath);
@@ -133,6 +134,7 @@ public class IndexerWrapper implements Indexer {
 			log.info("calling onFileAdd with:{}", fileEvent);
 			// TODO: data size not yet provisioned
 			this.onFileAdd(fileEvent);
+}
 
 		}
 
