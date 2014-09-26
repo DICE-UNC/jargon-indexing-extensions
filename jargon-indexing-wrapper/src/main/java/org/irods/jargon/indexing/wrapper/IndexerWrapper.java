@@ -118,7 +118,7 @@ public class IndexerWrapper implements Indexer {
 		for (DataEntity part : message.getHasPart()) {
 
 			log.info("part:{}", part);
-if (part instanceof DataObject) {
+			if (part instanceof DataObject) {
 			if (part.getLabel() != null) {
 				absolutePath = part.getLabel();
 				log.info("established absolutePath as:{}", absolutePath);
@@ -134,7 +134,7 @@ if (part instanceof DataObject) {
 			log.info("calling onFileAdd with:{}", fileEvent);
 			// TODO: data size not yet provisioned
 			this.onFileAdd(fileEvent);
-}
+			}
 
 		}
 
