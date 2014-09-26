@@ -119,21 +119,21 @@ public class IndexerWrapper implements Indexer {
 
 			log.info("part:{}", part);
 			if (part instanceof DataObject) {
-			if (part.getLabel() != null) {
-				absolutePath = part.getLabel();
-				log.info("established absolutePath as:{}", absolutePath);
-			}
-
-			// FIXME: https://github.com/DICE-UNC/indexing/issues/9
-			// really should be able to figure out the type here
-
-			FileEvent fileEvent = new FileEvent();
-			fileEvent.setIrodsAbsolutePath(absolutePath);
-			fileEvent.setObjectType(ObjectType.DATA_OBJECT);
-			fileEvent.setActionsEnum(actionsEnum.ADD);
-			log.info("calling onFileAdd with:{}", fileEvent);
-			// TODO: data size not yet provisioned
-			this.onFileAdd(fileEvent);
+				if (part.getLabel() != null) {
+					absolutePath = part.getLabel();
+					log.info("established absolutePath as:{}", absolutePath);
+				}
+	
+				// FIXME: https://github.com/DICE-UNC/indexing/issues/9
+				// really should be able to figure out the type here
+	
+				FileEvent fileEvent = new FileEvent();
+				fileEvent.setIrodsAbsolutePath(absolutePath);
+				fileEvent.setObjectType(ObjectType.DATA_OBJECT);
+				fileEvent.setActionsEnum(actionsEnum.ADD);
+				log.info("calling onFileAdd with:{}", fileEvent);
+				// TODO: data size not yet provisioned
+				this.onFileAdd(fileEvent);
 			}
 
 		}
