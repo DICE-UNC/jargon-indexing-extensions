@@ -119,10 +119,10 @@ public class IndexerWrapper implements Indexer {
 
 			log.info("part:{}", part);
 			if (part instanceof DataObject) {
-				if (part.getLabel() != null) {
+				// if (part.getLabel() != null) {
 					absolutePath = part.getLabel();
 					log.info("established absolutePath as:{}", absolutePath);
-				}
+				// }
 	
 				// FIXME: https://github.com/DICE-UNC/indexing/issues/9
 				// really should be able to figure out the type here
