@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.irods</groupId>
 	<artifactId>jargon-indexing-extensions</artifactId>
@@ -13,7 +14,6 @@
 		<jargon.version>4.0.3-SNAPSHOT</jargon.version>
 		<sl4j.version>1.6.6</sl4j.version>
 		<log4j.version>1.2.16</log4j.version>
-		<indexing.version>0.0.1-SNAPSHOT</indexing.version>
 		<spring.version>4.0.3.RELEASE</spring.version>
 	</properties>
 	<issueManagement>
@@ -260,12 +260,12 @@
 		</dependencies>
 	</dependencyManagement>
 	<dependencies>
-	    <dependency>
-				<groupId>databook</groupId>
-				<artifactId>index</artifactId>
-				<version>${indexing.version}</version>
-				<type>jar</type>
-				<exclusions>
+		<dependency>
+			<groupId>databook</groupId>
+			<artifactId>index</artifactId>
+			<version>${indexing.version}</version>
+			<type>jar</type>
+			<exclusions>
 				<exclusion>
 					<groupId>org.sl4j</groupId>
 					<artifactId>slf4j-api</artifactId>
@@ -279,7 +279,7 @@
 					<groupId>org.slf4j</groupId>
 				</exclusion>
 			</exclusions>
-			</dependency>
+		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -318,7 +318,7 @@
 	</dependencies>
 	<build>
 		<pluginManagement>
-			<plugins/>
+			<plugins />
 		</pluginManagement>
 		<plugins>
 			<plugin>
@@ -378,8 +378,7 @@
 		</plugins>
 	</build>
 	<modules>
-		<module>hive-metadata-indexer</module>
 		<module>jargon-indexing-wrapper</module>
-    <module>file-action-logging-indexer</module>
-  </modules>
+		<module>file-action-logging-indexer</module>
+	</modules>
 </project>
