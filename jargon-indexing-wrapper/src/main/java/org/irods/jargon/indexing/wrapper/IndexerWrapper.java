@@ -19,6 +19,7 @@ import databook.persistence.rule.rdf.ruleset.AVU;
 import databook.persistence.rule.rdf.ruleset.DataEntity;
 import databook.persistence.rule.rdf.ruleset.Message;
 import databook.persistence.rule.rdf.ruleset.Messages;
+import databook.persistence.rule.rdf.ruleset.DataObject;
 
 /**
  * Wrapper around indexing service that provides discrete event hooks and the
@@ -117,22 +118,23 @@ public class IndexerWrapper implements Indexer {
 		for (DataEntity part : message.getHasPart()) {
 
 			log.info("part:{}", part);
-
-			if (part.getLabel() != null) {
-				absolutePath = part.getLabel();
-				log.info("established absolutePath as:{}", absolutePath);
+			if (part instanceof DataObject) {
+				// if (part.getLabel() != null) {
+					absolutePath = part.getLabel();
+					log.info("established absolutePath as:{}", absolutePath);
+				// }
+	
+				// FIXME: https://github.com/DICE-UNC/indexing/issues/9
+				// really should be able to figure out the type here
+	
+				FileEvent fileEvent = new FileEvent();
+				fileEvent.setIrodsAbsolutePath(absolutePath);
+				fileEvent.setObjectType(ObjectType.DATA_OBJECT);
+				fileEvent.setActionsEnum(actionsEnum.ADD);
+				log.info("calling onFileAdd with:{}", fileEvent);
+				// TODO: data size not yet provisioned
+				this.onFileAdd(fileEvent);
 			}
-
-			// FIXME: https://github.com/DICE-UNC/indexing/issues/9
-			// really should be able to figure out the type here
-
-			FileEvent fileEvent = new FileEvent();
-			fileEvent.setIrodsAbsolutePath(absolutePath);
-			fileEvent.setObjectType(ObjectType.DATA_OBJECT);
-			fileEvent.setActionsEnum(actionsEnum.ADD);
-			log.info("calling onFileAdd with:{}", fileEvent);
-			// TODO: data size not yet provisioned
-			this.onFileAdd(fileEvent);
 
 		}
 
